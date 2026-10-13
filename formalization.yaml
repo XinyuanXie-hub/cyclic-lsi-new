@@ -1,0 +1,86 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/mathlib-initiative/formalization.yaml/main/schema/formalization.schema.json
+version: "v0.4"
+
+project:
+  name: "Log-Sobolev inequality on finite cyclic groups"
+  description: >-
+    Lean formalization of the word-length log-Sobolev
+    inequality on ZMod n for n at least 4 and nonnegative real functions.
+    The average is uniform probability, the Fourier coefficients are normalized
+    by 1/n, and the multiplier is the cyclic word length min(k, n-k).
+    The proof follows the cubic-majorant reduction and odd/even Fourier
+    third-moment estimates in the source paper.
+  authors:
+    - "Xinyuan Xie"
+    - "Haonan Zhang"
+  license: "Apache-2.0"
+  responsible_maintainers:
+    - "Xinyuan Xie"
+    - "Haonan Zhang"
+
+classification:
+  arxiv: ["math.CA", "math.FA"]
+  msc2020: ["26D10", "43A15"]
+
+sources:
+  - title: "Sharp log-Sobolev inequalities on finite cyclic groups"
+    authors: ["Xinyuan Xie", "Haonan Zhang"]
+    id: "arXiv:2606.02847v2"
+    type: "paper"
+    location: "https://arxiv.org/abs/2606.02847v2"
+    relationship: "formalizes"
+    note: >-
+      The intended target is the inequality portion of Theorem 1, as recorded
+      in docs/lsi-cyclic_arxiv_v2.tex. Authorship of the paper is recorded here
+      separately from authorship of the Lean formalization.
+
+status:
+  scope: >-
+    The development contains the cubic majorant, Propositions 6-9, and the
+    main inequality in Theorem 1. Only Theorem 1 is selected for Comparator.
+    Existing proofs were restored from the neighboring cyclic-lsi development
+    with all six mathematical statements unchanged, then migrated to the
+    supported Lean module system. The migrated source builds, and local
+    Comparator verification passes with Lean, NanoDa, and con-ron.
+  sorry_count: 0
+  sorry_in_definitions: 0
+  axioms: ["propext", "Classical.choice", "Quot.sound"]
+
+automation:
+  methods:
+    - method: "agent"
+      framework: "OpenAI Codex"
+      tool_setup: >-
+        Agent-assisted preparation of the Palomar statement, configuration,
+        module migration, metadata, and verification workflow.
+  notes: >-
+    The preparation agent reused the existing statements and proofs
+    from cyclic-lsi and ported them, rather than generating a new mathematical
+    argument. Historical prompt records in that development describe Codex
+    assistance with multiple agents; exact historical models are unconfirmed.
+
+fidelity:
+  divergences: >-
+    The compared statement covers only nonnegative real functions and the
+    inequality for n at least 4. It does not state sharpness, a complex-valued
+    extension, hypercontractivity, the circle result, or later stability results.
+
+review:
+  status: "machine-checked; human review unconfirmed"
+  notes: >-
+    The submission setup has received an automated structural inspection.
+    A fresh build on Lean and Mathlib v4.35.0-rc2 succeeds. All six results
+    report only propext, Classical.choice, and Quot.sound. On 2026-10-13,
+    local Comparator verification accepted the main theorem against Challenge,
+    including checks by Lean, NanoDa, and con-ron. This local macOS run used
+    --inadvisably-no-sandbox; the sandboxed Linux CI workflow is configured
+    but has not yet run. No independent human mathematical review is claimed.
+
+alignment:
+  namespace: "CyclicLsi"
+  statements:
+    - source: "Theorem 1, inequality for nonnegative real functions"
+      lean: "CyclicLsi.theorem1"
+      module: "CyclicLsi.MainTheorem"
+      status: "proved"
+      note: "Same inequality and hypotheses as the source; sharpness is not included."

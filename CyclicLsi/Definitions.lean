@@ -1,4 +1,6 @@
-import Mathlib.Analysis.Fourier.ZMod
+module
+
+public import Mathlib.Analysis.Fourier.ZMod
 
 /-!
 # Public definitions used in theorem statements
@@ -18,6 +20,8 @@ Project definitions introduced here:
 * `zmodWordLength k = |k|_cyc`, the word-length multiplier
   `ψ_n(k) = min(k, n-k)` expressed using Mathlib's `ZMod.valMinAbs`.
 -/
+
+@[expose] public section
 
 namespace CyclicLsi
 
