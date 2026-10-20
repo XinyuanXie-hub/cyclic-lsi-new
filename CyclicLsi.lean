@@ -1,7 +1,0 @@
-import CyclicLsi.Definitions
-import CyclicLsi.CubicMajorant
-import CyclicLsi.Proposition6
-import CyclicLsi.Proposition7
-import CyclicLsi.Proposition8
-import CyclicLsi.Proposition9
-import CyclicLsi.MainTheorem

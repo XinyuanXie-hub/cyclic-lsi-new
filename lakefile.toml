@@ -1,18 +1,25 @@
 name = "cyclic_lsi"
 version = "0.1.0"
 keywords = ["math"]
-defaultTargets = ["CyclicLsi"]
+defaultTargets = ["CyclicLsi", "Challenge"]
 
 [leanOptions]
 pp.unicode.fun = true # pretty-prints `fun a ↦ b`
 relaxedAutoImplicit = false
 weak.linter.mathlibStandardSet = true
 maxSynthPendingDepth = 3
+# Preserve the elaboration behavior of the original Lean 4.30 proofs.
+# This affects proof construction only; kernel and Comparator checks are unchanged.
+backward.isDefEq.respectTransparency = false
 
 [[require]]
 name = "mathlib"
 scope = "leanprover-community"
-rev = "v4.30.0-rc2"
+rev = "v4.35.0-rc2"
 
 [[lean_lib]]
 name = "CyclicLsi"
+globs = ["CyclicLsi.+"]
+
+[[lean_lib]]
+name = "Challenge"

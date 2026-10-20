@@ -21,22 +21,16 @@ Project definitions introduced here:
 
 namespace CyclicLsi
 
-open scoped BigOperators
-
-noncomputable section
-
 /-- Uniform average over a finite type, corresponding to the paper's `π(f)`. -/
-def avg {α : Type*} [Fintype α] (f : α → ℝ) : ℝ :=
+noncomputable def avg {α : Type*} [Fintype α] (f : α → ℝ) : ℝ :=
   (∑ x, f x) / (Fintype.card α : ℝ)
 
 /-- Normalized Fourier coefficient on `ZMod n`, corresponding to `\hat u(k)`. -/
-def fourierCoeff {n : ℕ} [NeZero n] (u : ZMod n → ℂ) (k : ZMod n) : ℂ :=
+noncomputable def fourierCoeff {n : ℕ} [NeZero n] (u : ZMod n → ℂ) (k : ZMod n) : ℂ :=
   (n : ℂ)⁻¹ * ZMod.dft u k
 
 /-- Word-length multiplier on `ZMod n`, corresponding to `ψ_n(k) = min(k,n-k)`. -/
 def zmodWordLength {n : ℕ} (k : ZMod n) : ℝ :=
   (k.valMinAbs.natAbs : ℝ)
-
-end
 
 end CyclicLsi

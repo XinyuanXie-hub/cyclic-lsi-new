@@ -1,0 +1,28 @@
+project:
+  name: "Log-Sobolev inequality on finite cyclic groups"
+  description: >-
+    Lean verification of the inequality in Theorem 1: the word-length log-Sobolev
+    inequality on ZMod n for n ≥ 4 and nonnegative real functions.
+  authors:
+    - "Xinyuan Xie"
+    - "Haonan Zhang"
+  license: "Apache-2.0"
+  responsible_maintainers:
+    - "Xinyuan Xie"
+    - "Haonan Zhang"
+
+classification:
+  arxiv: ["math.CA", "math.FA"]
+
+sources:
+  - title: "Sharp log-Sobolev inequalities and quartic stability on finite cyclic groups"
+    authors: ["Xinyuan Xie", "Haonan Zhang"]
+    id: "arXiv:2606.02847v4"
+    relationship: "formalizes"
+
+automation:
+  methods:
+    - method: "copilot"
+
+review:
+  status: "author-verified"

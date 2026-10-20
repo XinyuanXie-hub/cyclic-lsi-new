@@ -1,10 +1,11 @@
-import CyclicLsi.Definitions
+import CyclicLsi.Support.CubicMajorant.Lemmas
+
 
 /-!
-# Cubic majorant
+# Cubic majorant (Lemma 7 in v4)
 
-This public file contains only the pointwise Frank--Ivanisvili cubic majorant.
-The proof should be supplied by support lemmas in `CyclicLsi.Support`.
+This file proves the pointwise Frank--Ivanisvili cubic majorant used by Theorem 1.
+The derivative and monotonicity lemmas are in `CyclicLsi.Support.CubicMajorant.Lemmas`.
 
 Statement dictionary:
 
@@ -21,7 +22,9 @@ noncomputable section
 theorem pointwiseCubicMajorant (t : ℝ) (ht : 0 ≤ t) :
     t ^ 2 * Real.log (t ^ 2) ≤
       (2 / 3 : ℝ) * ((t - 1) ^ 2 * (t + 2)) + (t ^ 2 - 1) := by
-  sorry
+  have hgap := cubicMajorantGap_nonneg ht
+  unfold cubicMajorantGap at hgap
+  linarith
 
 end
 
