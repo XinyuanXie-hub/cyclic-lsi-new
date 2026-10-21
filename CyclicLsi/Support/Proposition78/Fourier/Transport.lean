@@ -1,4 +1,5 @@
-import CyclicLsi.Support.Proposition78.Fourier.Bridge
+module
+public import CyclicLsi.Support.Proposition78.Fourier.Bridge
 
 
 
@@ -12,7 +13,7 @@ This file provides the finite-equivalence bridge.
 
 namespace CyclicLsi
 
-noncomputable section
+@[expose] public noncomputable section
 
 open scoped BigOperators
 

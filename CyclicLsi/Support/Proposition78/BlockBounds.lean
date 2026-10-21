@@ -1,5 +1,6 @@
+module
 import Mathlib.Algebra.Order.Chebyshev
-import CyclicLsi.Support.Basic
+public import CyclicLsi.Support.Basic
 
 
 
@@ -15,7 +16,7 @@ The lemmas here prove the sharp numerical estimates applied to each block.
 
 namespace CyclicLsi
 
-noncomputable section
+@[expose] public noncomputable section
 
 open scoped BigOperators
 

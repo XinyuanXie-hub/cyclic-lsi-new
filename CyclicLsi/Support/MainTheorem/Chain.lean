@@ -1,4 +1,5 @@
-import CyclicLsi.Support.Basic
+module
+public import CyclicLsi.Support.Basic
 
 
 /-!
@@ -10,7 +11,7 @@ The proof chain in arXiv:2606.02847v4:
 
 namespace CyclicLsi
 
-noncomputable section
+public noncomputable section
 
 /-- The internal theorem-composition lemma used by the public proof of Theorem 1. -/
 theorem theorem1_from_propositions6_7_8_9 {energy : EnergyFamily}

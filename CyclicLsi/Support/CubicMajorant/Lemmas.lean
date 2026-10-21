@@ -1,4 +1,5 @@
-import CyclicLsi.Support.Basic
+module
+public import CyclicLsi.Support.Basic
 
 /-!
 # Cubic majorant
@@ -9,7 +10,7 @@ Frank--Ivanisvili cubic majorant in `CyclicLsi.Support.CubicMajorant`.
 
 namespace CyclicLsi
 
-noncomputable section
+@[expose] public noncomputable section
 
 /-- Difference between the cubic majorant and the entropy term. -/
 def cubicMajorantGap (t : ℝ) : ℝ :=

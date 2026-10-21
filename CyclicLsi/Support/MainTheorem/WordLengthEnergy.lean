@@ -1,7 +1,8 @@
-import CyclicLsi.Support.Proposition6.Lemmas
-import CyclicLsi.Support.Proposition7.Lemmas
-import CyclicLsi.Support.Proposition78.OddCase.Proof
-import CyclicLsi.Support.Proposition78.EvenCase.Proof
+module
+public import CyclicLsi.Support.Proposition6.Lemmas
+public import CyclicLsi.Support.Proposition7.Lemmas
+public import CyclicLsi.Support.Proposition78.OddCase.Proof
+public import CyclicLsi.Support.Proposition78.EvenCase.Proof
 
 
 /-!
@@ -14,7 +15,7 @@ invariance under centering, and nonnegativity of the surplus `Qsq`.
 
 namespace CyclicLsi
 
-noncomputable section
+public noncomputable section
 
 open scoped BigOperators
 

@@ -1,10 +1,11 @@
-import CyclicLsi.Support.CubicMajorant
-import CyclicLsi.Support.Proposition6
-import CyclicLsi.Support.Proposition7
-import CyclicLsi.Support.Proposition78.OddCase.Transport
-import CyclicLsi.Support.Proposition78.EvenCase.Transport
-import CyclicLsi.Support.MainTheorem.WordLengthEnergy
-import CyclicLsi.Support.MainTheorem.Chain
+module
+public import CyclicLsi.Support.CubicMajorant
+public import CyclicLsi.Support.Proposition6
+public import CyclicLsi.Support.Proposition7
+public import CyclicLsi.Support.Proposition78.OddCase.Transport
+public import CyclicLsi.Support.Proposition78.EvenCase.Transport
+public import CyclicLsi.Support.MainTheorem.WordLengthEnergy
+public import CyclicLsi.Support.MainTheorem.Chain
 
 /-!
 # Supporting results for the main theorem

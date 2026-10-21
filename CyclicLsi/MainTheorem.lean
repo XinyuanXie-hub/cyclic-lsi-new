@@ -1,4 +1,5 @@
-import CyclicLsi.Definitions
+module
+public import CyclicLsi.Definitions
 import CyclicLsi.Support
 
 /-!
@@ -25,7 +26,7 @@ Statement dictionary:
 namespace CyclicLsi
 
 /-- Theorem 1 of arXiv:2606.02847v4, excluding sharpness. -/
-theorem theorem1 (n : ℕ) (hn : 4 ≤ n)
+public theorem theorem1 (n : ℕ) (hn : 4 ≤ n)
     (f : ZMod n → ℝ) (hf : ∀ x, 0 ≤ f x) :
     letI : NeZero n := ⟨Nat.ne_of_gt (lt_of_lt_of_le (Nat.zero_lt_succ 3) hn)⟩
     avg (fun x : ZMod n ↦ f x ^ 2 * Real.log (f x ^ 2)) -

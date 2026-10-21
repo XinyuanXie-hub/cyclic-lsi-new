@@ -1,5 +1,6 @@
+module
 import CyclicLsi.Definitions
-import CyclicLsi.Support.Proposition78.OddCase.Proof
+public import CyclicLsi.Support.Proposition78.OddCase.Proof
 
 
 /-!
@@ -27,7 +28,7 @@ namespace CyclicLsi
 
 open scoped BigOperators
 
-noncomputable section
+public noncomputable section
 
 /-- Proposition 10, in the native odd cyclic-group `ZMod` form. -/
 theorem proposition8 (m : ℕ) (hm : 2 ≤ m)

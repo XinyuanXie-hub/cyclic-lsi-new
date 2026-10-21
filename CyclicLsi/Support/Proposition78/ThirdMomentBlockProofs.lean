@@ -1,5 +1,6 @@
-import CyclicLsi.Support.Proposition78.BlockBounds
-import CyclicLsi.Support.Proposition78.ThirdMomentBlocks
+module
+public import CyclicLsi.Support.Proposition78.BlockBounds
+public import CyclicLsi.Support.Proposition78.ThirdMomentBlocks
 
 
 
@@ -15,7 +16,7 @@ resonance step: for each real mean-zero `u`, construct the amplitude vector
 
 namespace CyclicLsi
 
-noncomputable section
+public noncomputable section
 
 /-- Nonnegativity of the zero-based square sum. -/
 theorem blockSsq_nonneg {m : ℕ} (a : Fin m → ℝ) :

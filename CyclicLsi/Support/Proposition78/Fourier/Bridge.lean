@@ -1,4 +1,5 @@
-import CyclicLsi.Support.Basic
+module
+public import CyclicLsi.Support.Basic
 
 
 
@@ -15,7 +16,7 @@ namespace CyclicLsi
 open scoped BigOperators
 open ZMod
 
-noncomputable section
+@[expose] public noncomputable section
 
 /-- Uniform complex average on `ZMod n`. -/
 def zmodAvg {n : ℕ} [NeZero n] (f : ZMod n → ℂ) : ℂ :=

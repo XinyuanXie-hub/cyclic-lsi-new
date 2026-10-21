@@ -1,6 +1,7 @@
-import CyclicLsi.Support.Proposition78.Fourier.Transport
+module
+public import CyclicLsi.Support.Proposition78.Fourier.Transport
 import CyclicLsi.Support.Proposition78.BlockBounds
-import CyclicLsi.Support.Proposition78.EvenCase.Resonance
+public import CyclicLsi.Support.Proposition78.EvenCase.Resonance
 
 
 
@@ -16,7 +17,7 @@ namespace CyclicLsi
 
 open scoped BigOperators
 
-noncomputable section
+@[expose] public noncomputable section
 
 abbrev realFourierCoeff {n : ℕ} [NeZero n]
     (u : ZMod n → ℝ) (k : ZMod n) : ℂ :=

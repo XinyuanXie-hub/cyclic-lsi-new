@@ -1,4 +1,5 @@
-import CyclicLsi.Support.CubicMajorant.Lemmas
+module
+public import CyclicLsi.Support.CubicMajorant.Lemmas
 
 
 /-!
@@ -16,7 +17,7 @@ Statement dictionary:
 
 namespace CyclicLsi
 
-noncomputable section
+public noncomputable section
 
 /-- The pointwise cubic majorant used in the entropy reduction. -/
 theorem pointwiseCubicMajorant (t : ℝ) (ht : 0 ≤ t) :

@@ -1,4 +1,5 @@
-import Mathlib.Analysis.Fourier.ZMod
+module
+public import Mathlib.Analysis.Fourier.ZMod
 
 /-!
 # Log-Sobolev inequality on finite cyclic groups
@@ -9,6 +10,8 @@ cyclic groups*, arXiv:2606.02847v4.
 
 The proof is in `CyclicLsi.MainTheorem`; `sorry` here marks the Comparator target.
 -/
+
+public section
 
 namespace CyclicLsi
 

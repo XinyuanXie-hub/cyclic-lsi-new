@@ -1,5 +1,6 @@
+module
 import CyclicLsi.Definitions
-import CyclicLsi.Support.Proposition6.Lemmas
+public import CyclicLsi.Support.Proposition6.Lemmas
 
 
 
@@ -25,7 +26,7 @@ namespace CyclicLsi
 
 open scoped BigOperators
 
-noncomputable section
+public noncomputable section
 
 /-- Proposition 8: the normalized cubic criterion implies the log-Sobolev
 inequality. -/

@@ -1,4 +1,5 @@
-import CyclicLsi.Support.Proposition9
+module
+public import CyclicLsi.Support.Proposition9
 
 
 
@@ -13,7 +14,7 @@ namespace CyclicLsi
 
 open scoped BigOperators
 
-noncomputable section
+public noncomputable section
 
 /-- Proposition 11 transported to `Fin` and unfolded in the theorem type used
 by the main finite theorem. -/

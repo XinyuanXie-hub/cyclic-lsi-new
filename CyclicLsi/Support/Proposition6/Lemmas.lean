@@ -1,4 +1,5 @@
-import CyclicLsi.Support.Basic
+module
+public import CyclicLsi.Support.Basic
 
 
 
@@ -13,7 +14,7 @@ namespace CyclicLsi
 
 open scoped BigOperators
 
-noncomputable section
+@[expose] public noncomputable section
 
 /-- Quadratic homogeneity of an energy functional. -/
 def QuadraticHomogeneous {α : Type*} (energy : (α → ℝ) → ℝ) : Prop :=

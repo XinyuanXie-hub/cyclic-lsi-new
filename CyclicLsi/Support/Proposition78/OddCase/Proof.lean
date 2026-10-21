@@ -1,4 +1,5 @@
-import CyclicLsi.Support.Proposition78.Fourier.ResonanceBounds
+module
+public import CyclicLsi.Support.Proposition78.Fourier.ResonanceBounds
 
 
 /-!
@@ -12,7 +13,7 @@ namespace CyclicLsi
 
 open scoped BigOperators
 
-noncomputable section
+@[expose] public noncomputable section
 
 theorem oddFourierAmp_nonneg {m : ℕ} (u : ZMod (2 * m + 1) → ℝ) (j : Fin m) :
     0 ≤ oddFourierAmp m u j := by

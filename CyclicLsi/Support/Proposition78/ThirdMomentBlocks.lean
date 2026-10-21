@@ -1,4 +1,5 @@
-import CyclicLsi.Support.Basic
+module
+public import CyclicLsi.Support.Basic
 
 
 
@@ -13,7 +14,7 @@ estimates.
 
 namespace CyclicLsi
 
-noncomputable section
+public noncomputable section
 
 /-- The numerical constant in the odd estimate is strictly below `3`. -/
 theorem odd_block_constant_lt_three :

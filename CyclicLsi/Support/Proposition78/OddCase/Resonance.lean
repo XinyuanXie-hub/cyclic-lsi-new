@@ -1,4 +1,5 @@
-import CyclicLsi.Support.Proposition78.Fourier.Bridge
+module
+public import CyclicLsi.Support.Proposition78.Fourier.Bridge
 
 
 
@@ -14,7 +15,7 @@ namespace CyclicLsi
 
 open scoped BigOperators
 
-noncomputable section
+@[expose] public noncomputable section
 
 abbrev OddN (m : ℕ) : ℕ :=
   2 * m + 1

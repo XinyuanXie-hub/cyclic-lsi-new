@@ -1,4 +1,5 @@
-import CyclicLsi.Definitions
+module
+public import CyclicLsi.Definitions
 
 
 
@@ -13,7 +14,7 @@ namespace CyclicLsi
 
 open scoped BigOperators
 
-noncomputable section
+@[expose] public noncomputable section
 
 theorem avg_mono {α : Type*} [Fintype α] {f g : α → ℝ} (h : ∀ x, f x ≤ g x) :
     avg f ≤ avg g := by

@@ -1,5 +1,6 @@
+module
 import CyclicLsi.Definitions
-import CyclicLsi.Support.Proposition7.Lemmas
+public import CyclicLsi.Support.Proposition7.Lemmas
 
 /-!
 # Proposition 9: cubic criterion from the third-moment estimate
@@ -24,7 +25,7 @@ namespace CyclicLsi
 
 open scoped BigOperators
 
-noncomputable section
+public noncomputable section
 
 /-- Proposition 9: the mean-zero third-moment estimate implies the normalized
 cubic criterion. -/

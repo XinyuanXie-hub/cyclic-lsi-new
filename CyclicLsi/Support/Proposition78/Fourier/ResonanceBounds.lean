@@ -1,6 +1,7 @@
-import CyclicLsi.Support.Proposition78.Fourier.Amplitudes
-import CyclicLsi.Support.Proposition78.OddCase.Resonance
-import CyclicLsi.Support.Proposition78.ThirdMomentBlockProofs
+module
+public import CyclicLsi.Support.Proposition78.Fourier.Amplitudes
+public import CyclicLsi.Support.Proposition78.OddCase.Resonance
+public import CyclicLsi.Support.Proposition78.ThirdMomentBlockProofs
 
 
 
@@ -16,7 +17,7 @@ namespace CyclicLsi
 
 open scoped BigOperators
 
-noncomputable section
+@[expose] public noncomputable section
 
 theorem sum_if_le_sum_of_surj_on {α β : Type*} [Fintype α] [Fintype β]
     (P : α → Prop) [DecidablePred P]

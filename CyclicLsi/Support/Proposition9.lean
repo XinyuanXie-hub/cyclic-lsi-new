@@ -1,5 +1,6 @@
+module
 import CyclicLsi.Definitions
-import CyclicLsi.Support.Proposition78.EvenCase.Proof
+public import CyclicLsi.Support.Proposition78.EvenCase.Proof
 
 
 /-!
@@ -27,7 +28,7 @@ namespace CyclicLsi
 
 open scoped BigOperators
 
-noncomputable section
+public noncomputable section
 
 /-- Proposition 11, in the native even cyclic-group `ZMod` form. -/
 theorem proposition9 (m : ℕ) (hm : 2 ≤ m) :

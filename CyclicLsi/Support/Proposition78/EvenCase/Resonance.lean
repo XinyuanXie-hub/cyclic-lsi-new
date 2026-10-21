@@ -1,4 +1,5 @@
-import CyclicLsi.Support.Proposition78.BlockBounds
+module
+public import CyclicLsi.Support.Proposition78.BlockBounds
 
 
 
@@ -15,7 +16,7 @@ namespace CyclicLsi
 
 open scoped BigOperators
 
-noncomputable section
+@[expose] public noncomputable section
 
 inductive EvenFreq (m : ℕ) where
   | pos : Fin (m - 1) → EvenFreq m

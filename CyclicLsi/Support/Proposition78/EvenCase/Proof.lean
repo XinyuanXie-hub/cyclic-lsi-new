@@ -1,4 +1,5 @@
-import CyclicLsi.Support.Proposition78.Fourier.ResonanceBounds
+module
+public import CyclicLsi.Support.Proposition78.Fourier.ResonanceBounds
 
 
 /-!
@@ -12,7 +13,7 @@ namespace CyclicLsi
 
 open scoped BigOperators
 
-noncomputable section
+@[expose] public noncomputable section
 
 theorem norm_evenFreq_pos_eq_sqrt_half_mul_amp {m : ℕ} [NeZero (2 * m)]
     (hm : 2 ≤ m) (u : ZMod (2 * m) → ℝ) (j : Fin (m - 1)) :

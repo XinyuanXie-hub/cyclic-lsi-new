@@ -1,4 +1,5 @@
-import CyclicLsi.Support.Basic
+module
+public import CyclicLsi.Support.Basic
 
 
 
@@ -13,7 +14,7 @@ namespace CyclicLsi
 
 open scoped BigOperators
 
-noncomputable section
+@[expose] public noncomputable section
 
 /-- Center a function by subtracting its uniform average. -/
 def centered {α : Type*} [Fintype α] (x : α → ℝ) : α → ℝ :=
