@@ -1,6 +1,6 @@
-# Log-Sobolev inequality on finite cyclic groups
+# Sharp log-Sobolev inequality on finite cyclic groups
 
-This project uses Lean to verify the log-Sobolev inequality in Theorem 1 of [our paper](https://arxiv.org/abs/2606.02847v4).
+This project uses Lean to verify the sharp log-Sobolev inequality in Theorem 1 of [*Sharp log-Sobolev inequalities and quartic stability on finite cyclic groups*](https://arxiv.org/abs/2606.02847), by [Xinyuan Xie](https://xinyuanxie-hub.github.io/) and [Haonan Zhang](https://sites.google.com/view/haonanzhangmathsearch-console).
 
 ## Mathematical statement
 
@@ -22,11 +22,11 @@ where
 \widehat f(k)=\frac{1}{n}\sum_{x=0}^{n-1}f(x)e^{-2\pi i kx/n}.
 ```
 
-The constant $`2`$ is sharp by the standard perturbation argument recalled in [Section 5 of our paper](https://arxiv.org/html/2606.02847v4#S5); the formalization here concerns the inequality.
+The constant $`2`$ is sharp by the standard perturbation argument recalled in [Section 5 of the paper](https://arxiv.org/html/2606.02847#S5); the formalization here concerns the inequality.
 
 ## Verification
 
-First, we translate the mathematical statement into [Lean](https://lean-lang.org/doc/reference/4.35.0/), a language in which a computer can check mathematical proofs; the statement and its definitions are stored in [Challenge.lean](Challenge.lean). The proof in [Solution.lean](Solution.lean) is generated based on the argument in our paper. We then run [`lake comparator`](https://lean-lang.org/doc/reference/latest/Build-Tools-and-Distribution/Lake/), which is included in the Lean toolchain, to check this proof against the statement in `Challenge.lean`.
+First, we translate the mathematical statement into [Lean](https://lean-lang.org/doc/reference/4.35.0/), a language in which a computer can check mathematical proofs; the statement and its definitions are stored in [Challenge.lean](Challenge.lean). The proof in [Solution.lean](Solution.lean) is generated based on the argument in the paper. We then run [`lake comparator`](https://lean-lang.org/doc/reference/latest/Build-Tools-and-Distribution/Lake/), which is included in the Lean toolchain, to check this proof against the statement in `Challenge.lean`.
 
 Comparator checks that the theorem statement and its referenced definitions agree on both sides, and that the proof uses only the standard axioms permitted in [comparator.json](comparator.json). It checks the proof with Lean's kernel (its proof checker) and two independent checkers, NanoDa and con-ron. Whether the translation in `Challenge.lean` expresses the intended mathematical statement remains for us to check.
 
