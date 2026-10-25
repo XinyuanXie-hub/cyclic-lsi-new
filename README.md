@@ -1,6 +1,10 @@
 # Sharp log-Sobolev inequality on finite cyclic groups
 
-This project uses Lean to verify the sharp log-Sobolev inequality in Theorem 1 of [*Sharp log-Sobolev inequalities and quartic stability on finite cyclic groups*](https://arxiv.org/abs/2606.02847), by [Xinyuan Xie](https://xinyuanxie-hub.github.io/) and [Haonan Zhang](https://sites.google.com/view/haonanzhangmathsearch-console).
+This repository uses Lean and Comparator to verify the sharp log-Sobolev inequality in Theorem 1 of:
+
+> [Xinyuan Xie](https://xinyuanxie-hub.github.io/) and [Haonan Zhang](https://sites.google.com/view/haonanzhangmathsearch-console),
+> *Sharp log-Sobolev inequalities and quartic stability on finite cyclic groups*,
+> [arXiv:2606.02847](https://arxiv.org/abs/2606.02847).
 
 ## Mathematical statement
 
