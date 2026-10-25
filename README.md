@@ -4,25 +4,25 @@ This project uses Lean to verify the log-Sobolev inequality in Theorem 1 of [our
 
 ## Mathematical statement
 
-Let $\mathbb{Z}_n=\mathbb{Z}/n\mathbb{Z}$ be the cyclic group equipped with the uniform probability measure $\pi$, so that $\pi(g)=\frac{1}{n}\sum_{x\in\mathbb{Z}_n}g(x)$. For every $n\geq 4$ and every nonnegative $f:\mathbb{Z}_n\to\mathbb{R}$,
+Let $`\mathbb{Z}_n=\mathbb{Z}/n\mathbb{Z}`$ be the cyclic group equipped with the uniform probability measure $`\pi`$, so that $`\pi(g)=\frac{1}{n}\sum_{x\in\mathbb{Z}_n}g(x)`$. For every $`n\geq 4`$ and every nonnegative $`f:\mathbb{Z}_n\to\mathbb{R}`$,
 
-$$
-\operatorname{Ent}_{\pi}(f^2)\leq 2\mathcal{E}_n(f).
-$$
+```math
+\mathrm{Ent}_{\pi}(f^2)\leq 2\mathcal{E}_n(f).
+```
 
-Here $\operatorname{Ent}_{\pi}(g)=\pi(g\log g)-\pi(g)\log\pi(g)$ for nonnegative $g$, with natural logarithms and $0\log 0=0$, and the Dirichlet form is
+Here $`\mathrm{Ent}_{\pi}(g)=\pi(g\log g)-\pi(g)\log\pi(g)`$ for nonnegative $`g`$, with natural logarithms and $`0\log 0=0`$, and the Dirichlet form is
 
-$$
+```math
 \mathcal{E}_n(f)=\sum_{k=0}^{n-1}\min(k,n-k)\,|\widehat f(k)|^2,
-$$
+```
 
 where
 
-$$
+```math
 \widehat f(k)=\frac{1}{n}\sum_{x=0}^{n-1}f(x)e^{-2\pi i kx/n}.
-$$
+```
 
-The constant $2$ is sharp by the standard perturbation argument recalled in [Section 5 of our paper](https://arxiv.org/html/2606.02847v4#S5); the formalization here concerns the inequality.
+The constant $`2`$ is sharp by the standard perturbation argument recalled in [Section 5 of our paper](https://arxiv.org/html/2606.02847v4#S5); the formalization here concerns the inequality.
 
 ## Verification
 
