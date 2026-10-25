@@ -1,14 +1,14 @@
 # Sharp log-Sobolev inequality on finite cyclic groups
 
-This repository uses Lean and Comparator to verify the sharp log-Sobolev inequality in Theorem 1 of:
+This project uses Lean, a language in which a computer can check mathematical proofs, to verify the sharp log-Sobolev inequality in Theorem 1 of:
 
-> [Xinyuan Xie](https://xinyuanxie-hub.github.io/) and [Haonan Zhang](https://sites.google.com/view/haonanzhangmathsearch-console),
+> Xinyuan Xie and Haonan Zhang,
 > *Sharp log-Sobolev inequalities and quartic stability on finite cyclic groups*,
 > [arXiv:2606.02847](https://arxiv.org/abs/2606.02847).
 
 ## Mathematical statement
 
-Let $`\mathbb{Z}_n=\mathbb{Z}/n\mathbb{Z}`$ be the cyclic group equipped with the uniform probability measure $`\pi`$, so that $`\pi(g)=\frac{1}{n}\sum_{x\in\mathbb{Z}_n}g(x)`$. For every $`n\geq 4`$ and every nonnegative $`f:\mathbb{Z}_n\to\mathbb{R}`$,
+Let $`\mathbb{Z}_n=\mathbb{Z}/n\mathbb{Z}`$ be the cyclic group equipped with the uniform probability measure $`\pi`$, so that $`\pi(g)=\frac{1}{n}\sum_{x\in\mathbb{Z}_n}g(x)`$. For every $`n\geq 4`$ and every nonnegative $`f:\mathbb{Z}_n\to\mathbb{R}`$, we verify that
 
 ```math
 \mathrm{Ent}_{\pi}(f^2)\leq 2\mathcal{E}_n(f).
@@ -26,11 +26,11 @@ where
 \widehat f(k)=\frac{1}{n}\sum_{x=0}^{n-1}f(x)e^{-2\pi i kx/n}.
 ```
 
-The constant $`2`$ is sharp by the standard perturbation argument recalled in [Section 5 of the paper](https://arxiv.org/html/2606.02847#S5); the formalization here concerns the inequality.
+The constant $`2`$ is sharp by the standard perturbation argument recalled in [Section 5 of the paper](https://arxiv.org/html/2606.02847#S5), and the formalization here concerns only the inequality part.
 
 ## Verification
 
-First, we translate the mathematical statement into [Lean](https://lean-lang.org/doc/reference/4.35.0/), a language in which a computer can check mathematical proofs; the statement and its definitions are stored in [Challenge.lean](Challenge.lean). The proof in [Solution.lean](Solution.lean) is generated based on the argument in the paper. We then run [`lake comparator`](https://lean-lang.org/doc/reference/latest/Build-Tools-and-Distribution/Lake/), which is included in the Lean toolchain, to check this proof against the statement in `Challenge.lean`.
+First, we translate the mathematical statement into [Lean](https://lean-lang.org/doc/reference/4.35.0/); the statement and its definitions are stored in [Challenge.lean](Challenge.lean). The proof in [Solution.lean](Solution.lean) is generated based on the argument in the paper. We then run [`lake comparator`](https://lean-lang.org/doc/reference/latest/Build-Tools-and-Distribution/Lake/), which is included in the Lean toolchain, to check this proof against the statement in `Challenge.lean`.
 
 Comparator checks that the theorem statement and its referenced definitions agree on both sides, and that the proof uses only the standard axioms permitted in [comparator.json](comparator.json). It checks the proof with Lean's kernel (its proof checker) and two independent checkers, NanoDa and con-ron. Whether the translation in `Challenge.lean` expresses the intended mathematical statement remains for us to check.
 
