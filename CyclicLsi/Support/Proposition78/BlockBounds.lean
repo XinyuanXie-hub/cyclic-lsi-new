@@ -652,7 +652,7 @@ theorem oddSquareSum_eq_pair_sum {m : ℕ} (a : Fin m → ℝ) :
       by_cases h0 : r.val = 0
       · have hU0 : oddU a r = 0 := by
           unfold oddU
-          haveI : IsEmpty (Fin r.val) := by
+          have : IsEmpty (Fin r.val) := by
             rw [h0]
             infer_instance
           exact Fintype.sum_empty _

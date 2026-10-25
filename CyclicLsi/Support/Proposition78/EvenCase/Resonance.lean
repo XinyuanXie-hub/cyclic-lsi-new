@@ -27,13 +27,21 @@ inductive EvenFreq (m : ℕ) where
 inductive EvenOrientation where
   | base
   | conj
-  deriving DecidableEq, Fintype, Repr
+  deriving DecidableEq, Repr
+
+instance : Fintype EvenOrientation where
+  elems := {.base, .conj}
+  complete := by intro x; cases x <;> simp
 
 inductive EvenSlot where
   | fst
   | snd
   | thd
-  deriving DecidableEq, Fintype, Repr
+  deriving DecidableEq, Repr
+
+instance : Fintype EvenSlot where
+  elems := {.fst, .snd, .thd}
+  complete := by intro x; cases x <;> simp
 
 abbrev EvenTriple (m : ℕ) : Type :=
   EvenFreq m × EvenFreq m × EvenFreq m
@@ -448,7 +456,8 @@ theorem evenResonanceTriple_exists_of_sum_zero {m : ℕ} (hm : 2 ≤ m)
               have hsum := evenMiddle_nat_sum_eq_of_sum_zero hm EvenSlot.thd a b hplace
               have hp := evenMiddleCoreTriple_eq_placeMiddle_of_sum EvenSlot.thd a b hsum
               refine ⟨Sum.inr (EvenOrientation.base, EvenSlot.thd, a), ?_⟩
-              simpa [evenResonanceTriple, evenMiddleTriple, evenOrientTriple, evenPlaceMiddle] using hp
+              simpa [evenResonanceTriple, evenMiddleTriple, evenOrientTriple, evenPlaceMiddle]
+                using hp
       | neg b =>
           cases z with
           | pos c =>
@@ -482,7 +491,8 @@ theorem evenResonanceTriple_exists_of_sum_zero {m : ℕ} (hm : 2 ≤ m)
               have hsum := evenMiddle_nat_sum_eq_of_sum_zero hm EvenSlot.snd a c hplace
               have hp := evenMiddleCoreTriple_eq_placeMiddle_of_sum EvenSlot.snd a c hsum
               refine ⟨Sum.inr (EvenOrientation.base, EvenSlot.snd, a), ?_⟩
-              simpa [evenResonanceTriple, evenMiddleTriple, evenOrientTriple, evenPlaceMiddle] using hp
+              simpa [evenResonanceTriple, evenMiddleTriple, evenOrientTriple, evenPlaceMiddle]
+                using hp
           | neg c =>
               exfalso
               exact even_pos_neg_mid_sum_ne_zero hm a c (by
@@ -591,7 +601,8 @@ theorem evenResonanceTriple_exists_of_sum_zero {m : ℕ} (hm : 2 ≤ m)
               have hsum := evenMiddle_nat_sum_eq_of_sum_zero hm EvenSlot.fst b c hplace
               have hp := evenMiddleCoreTriple_eq_placeMiddle_of_sum EvenSlot.fst b c hsum
               refine ⟨Sum.inr (EvenOrientation.base, EvenSlot.fst, b), ?_⟩
-              simpa [evenResonanceTriple, evenMiddleTriple, evenOrientTriple, evenPlaceMiddle] using hp
+              simpa [evenResonanceTriple, evenMiddleTriple, evenOrientTriple, evenPlaceMiddle]
+                using hp
           | neg c =>
               exfalso
               exact even_pos_neg_mid_sum_ne_zero hm b c (by

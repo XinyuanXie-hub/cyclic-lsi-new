@@ -45,7 +45,7 @@ lemma zmodWordEnergyReal_smul {n : ℕ} [NeZero n]
 theorem finWordEnergy_quadraticHomogeneous_ge4 {n : ℕ} (hn : 4 ≤ n) :
     QuadraticHomogeneous (finWordEnergy n) := by
   intro c u
-  haveI : NeZero n := ⟨by omega⟩
+  have : NeZero n := ⟨by omega⟩
   rw [finWordEnergy_of_ne, finWordEnergy_of_ne]
   change zmodWordEnergyReal (finToZModFun (fun x : Fin n => c * u x)) =
     c ^ 2 * zmodWordEnergyReal (finToZModFun u)
@@ -99,7 +99,7 @@ lemma zmodWordEnergyReal_sub_const {n : ℕ} [NeZero n]
 
 theorem finWordEnergy_centered_ge4 {n : ℕ} (hn : 4 ≤ n) (x : Fin n → ℝ) :
     finWordEnergy n x = finWordEnergy n (centered x) := by
-  haveI : NeZero n := ⟨by omega⟩
+  have : NeZero n := ⟨by omega⟩
   rw [finWordEnergy_of_ne, finWordEnergy_of_ne]
   change zmodWordEnergyReal (finToZModFun x) =
     zmodWordEnergyReal (finToZModFun (centered x))
@@ -114,7 +114,7 @@ theorem finWordEnergy_qsq_nonneg_ge4 {n : ℕ} (hn : 4 ≤ n)
   rcases Nat.even_or_odd' n with ⟨m, h | h⟩
   · subst h
     have hm : 2 ≤ m := by omega
-    haveI : NeZero (2 * m) := ⟨by omega⟩
+    have : NeZero (2 * m) := ⟨by omega⟩
     let uz : ZMod (2 * m) → ℝ := finToZModFun u
     have hmean : MeanZero uz := by
       dsimp [uz, finToZModFun]
@@ -132,7 +132,7 @@ theorem finWordEnergy_qsq_nonneg_ge4 {n : ℕ} (hn : 4 ≤ n)
     simpa [Qsq, finWordEnergy_of_ne, uz, hS] using hQz
   · subst h
     have hm : 2 ≤ m := by omega
-    haveI : NeZero (2 * m + 1) := ⟨by omega⟩
+    have : NeZero (2 * m + 1) := ⟨by omega⟩
     let uz : ZMod (2 * m + 1) → ℝ := finToZModFun u
     have hmean : MeanZero uz := by
       dsimp [uz, finToZModFun]

@@ -42,7 +42,7 @@ theorem proposition9 (m : ℕ) (hm : 2 ≤ m) :
                   zmodWordLength k *
                     Complex.normSq (fourierCoeff (fun x : ZMod (2 * m) ↦ (u x : ℂ)) k)) -
                 avg (fun x : ZMod (2 * m) ↦ u x ^ 2)) := by
-  letI : NeZero (2 * m) := ⟨by omega⟩
+  let : NeZero (2 * m) := ⟨by omega⟩
   intro u hu
   have hu_mean : MeanZero u := hu
   let a : Fin m → ℝ := evenFourierAmp (m := m) u

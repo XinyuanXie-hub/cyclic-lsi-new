@@ -15,34 +15,36 @@ jobs:
     name: Build Lean project
     runs-on: ubuntu-latest
     steps:
-      - name: Check out repository
+      - name: Check out source code
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           persist-credentials: false
 
-      - name: Build with lean-action
+      - name: Set up Lean and build Challenge and Solution
         uses: leanprover/lean-action@38fbc41a8c28c4cbaec22d7f7de508ec2e7c0dd9
         with:
           auto-config: false
           build: true
-          build-args: CyclicLsi Challenge
+          build-args: Challenge Solution
 
   comparator:
-    name: Verify the advertised theorem
+    name: Verify the Challenge against Solution
     runs-on: ubuntu-24.04
     timeout-minutes: 60
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - name: Check out source code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           persist-credentials: false
-      - uses: leanprover/lean-action@38fbc41a8c28c4cbaec22d7f7de508ec2e7c0dd9
+      - name: Set up Lean and restore Mathlib cache
+        uses: leanprover/lean-action@38fbc41a8c28c4cbaec22d7f7de508ec2e7c0dd9
         with:
           auto-config: false
           build: false
-      - name: Prepare Comparator sandbox on the disposable runner
+      - name: Install bubblewrap and configure user namespaces
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y -qq bubblewrap
           sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
-      - name: Verify with Lean, NanoDa, and con-ron
+      - name: Run Comparator with Lean, NanoDa, and con-ron
         run: bash scripts/verify-comparator.sh

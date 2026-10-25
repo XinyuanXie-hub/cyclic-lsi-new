@@ -8,8 +8,8 @@ public import CyclicLsi.Support.MainTheorem.WordLengthEnergy
 public import CyclicLsi.Support.MainTheorem.Chain
 
 /-!
-# Supporting results for the main theorem
+# Cyclic LSI library
 
-This file collects the existing supporting imports used by `CyclicLsi.MainTheorem`.
+This root module collects the supporting imports used by `Solution`.
 The definitions and proofs remain in their original files and namespaces.
 -/

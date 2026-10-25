@@ -189,7 +189,7 @@ theorem norm_oddSignedFreq_eq_sqrt_half_mul_amp {m : ℕ}
     (u : ZMod (2 * m + 1) → ℝ) (f : OddSignedFreq m) :
     ‖realFourierCoeff u (oddSignedFreq f)‖ =
       √((1 : ℝ) / 2) * oddFourierAmp m u f.2 := by
-  haveI : NeZero (2 * m + 1) := ⟨by omega⟩
+  have : NeZero (2 * m + 1) := ⟨by omega⟩
   cases f with
   | mk s j =>
     cases s
@@ -240,7 +240,8 @@ theorem odd_abs_avg_cube_le_triple_norm_sum {m : ℕ} [NeZero (2 * m + 1)]
           rw [oddFullFreq_triple_sum_nonzero]
           · apply Finset.sum_congr rfl
             intro t _
-            simp [oddFullFreqZ_toSigned, oddTripleSum]
+            simp only [oddFullFreqZ_toSigned, oddTripleSum]
+            rfl
           · intro g h
             by_cases hsum : oddFullFreqZ OddFullFreq.zero +
                 oddFullFreqZ g + oddFullFreqZ h = 0
@@ -341,7 +342,8 @@ theorem even_abs_avg_cube_le_triple_norm_sum {m : ℕ} [NeZero (2 * m)]
           rw [evenFullFreq_triple_sum_nonzero]
           · apply Finset.sum_congr rfl
             intro t _
-            simp [evenFullFreqZ_toFull, evenTripleSum]
+            simp only [evenFullFreqZ_toFull, evenTripleSum]
+            rfl
           · intro g h
             by_cases hsum : evenFullFreqZ EvenFullFreq.zero +
                 evenFullFreqZ g + evenFullFreqZ h = 0

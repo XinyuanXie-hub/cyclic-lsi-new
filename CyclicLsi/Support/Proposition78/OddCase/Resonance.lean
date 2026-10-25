@@ -23,18 +23,30 @@ abbrev OddN (m : ℕ) : ℕ :=
 inductive OddSign where
   | pos
   | neg
-  deriving DecidableEq, Fintype, Repr
+  deriving DecidableEq, Repr
+
+instance : Fintype OddSign where
+  elems := {.pos, .neg}
+  complete := by intro x; cases x <;> simp
 
 inductive OddOrientation where
   | base
   | conj
-  deriving DecidableEq, Fintype, Repr
+  deriving DecidableEq, Repr
+
+instance : Fintype OddOrientation where
+  elems := {.base, .conj}
+  complete := by intro x; cases x <;> simp
 
 inductive OddSlot where
   | fst
   | snd
   | thd
-  deriving DecidableEq, Fintype, Repr
+  deriving DecidableEq, Repr
+
+instance : Fintype OddSlot where
+  elems := {.fst, .snd, .thd}
+  complete := by intro x; cases x <;> simp
 
 abbrev OddSignedFreq (m : ℕ) : Type :=
   OddSign × Fin m

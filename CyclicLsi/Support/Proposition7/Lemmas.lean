@@ -22,14 +22,14 @@ def centered {α : Type*} [Fintype α] (x : α → ℝ) : α → ℝ :=
 
 theorem centered_meanZero_fin {n : ℕ} (hn : n ≠ 0) (x : Fin n → ℝ) :
     MeanZero (centered x) := by
-  haveI : Nonempty (Fin n) := ⟨⟨0, Nat.pos_of_ne_zero hn⟩⟩
+  have : Nonempty (Fin n) := ⟨⟨0, Nat.pos_of_ne_zero hn⟩⟩
   unfold MeanZero centered
   rw [avg_sub, avg_const]
   ring
 
 theorem Ssq_centered_eq {n : ℕ} (hn : n ≠ 0) (x : Fin n → ℝ) :
     Ssq (centered x) = avg (fun i ↦ x i ^ 2) - avg x ^ 2 := by
-  haveI : Nonempty (Fin n) := ⟨⟨0, Nat.pos_of_ne_zero hn⟩⟩
+  have : Nonempty (Fin n) := ⟨⟨0, Nat.pos_of_ne_zero hn⟩⟩
   unfold Ssq centered
   have hpoint :
       ∀ i : Fin n,
@@ -47,7 +47,7 @@ theorem Ssq_centered_eq {n : ℕ} (hn : n ≠ 0) (x : Fin n → ℝ) :
 theorem cubicExpression_centered_expansion {n : ℕ} (hn : n ≠ 0) (x : Fin n → ℝ)
     (hnorm : avg (fun i ↦ x i ^ 2) = 1) :
     cubicExpression x = 2 - 2 * avg x ^ 3 + avg (fun i ↦ centered x i ^ 3) := by
-  haveI : Nonempty (Fin n) := ⟨⟨0, Nat.pos_of_ne_zero hn⟩⟩
+  have : Nonempty (Fin n) := ⟨⟨0, Nat.pos_of_ne_zero hn⟩⟩
   let a : ℝ := avg x
   let u : Fin n → ℝ := centered x
   have hu_avg : avg u = 0 := centered_meanZero_fin hn x

@@ -205,7 +205,7 @@ theorem odd_blockSsq_fourierAmp_eq_zmodFourierSsq
     {m : ℕ} {u : ZMod (2 * m + 1) → ℝ} (hu : MeanZero u) :
     blockSsq (oddFourierAmp m u) =
       zmodFourierSsq (fun x : ZMod (2 * m + 1) ↦ (u x : ℂ)) := by
-  haveI : NeZero (2 * m + 1) := ⟨by omega⟩
+  have : NeZero (2 * m + 1) := ⟨by omega⟩
   unfold zmodFourierSsq blockSsq oddFourierAmp realFourierCoeff
   rw [sum_zmod_oddFullFreq]
   rw [oddFullFreq_sum_expand (m := m) (β := ℝ)
@@ -241,7 +241,7 @@ theorem odd_blockEnergy_fourierAmp_eq_zmodFourierEnergy
     {m : ℕ} {u : ZMod (2 * m + 1) → ℝ} (hu : MeanZero u) :
     blockEnergy (oddFourierAmp m u) =
       zmodFourierEnergy (fun x : ZMod (2 * m + 1) ↦ (u x : ℂ)) := by
-  haveI : NeZero (2 * m + 1) := ⟨by omega⟩
+  have : NeZero (2 * m + 1) := ⟨by omega⟩
   unfold zmodFourierEnergy blockEnergy oddFourierAmp realFourierCoeff
   rw [sum_zmod_oddFullFreq]
   rw [oddFullFreq_sum_expand (m := m) (β := ℝ)
@@ -591,7 +591,7 @@ theorem even_blockSsq_fourierAmp_eq_zmodFourierSsq
     {m : ℕ} [NeZero (2 * m)] {u : ZMod (2 * m) → ℝ} (hu : MeanZero u) :
     blockSsq (evenFourierAmp (m := m) u) =
       zmodFourierSsq (fun x : ZMod (2 * m) ↦ (u x : ℂ)) := by
-  haveI : NeZero m := ⟨by
+  have : NeZero m := ⟨by
     intro hm
     exact (NeZero.ne (2 * m)) (by omega)⟩
   unfold zmodFourierSsq
@@ -665,7 +665,7 @@ theorem even_blockEnergy_fourierAmp_eq_zmodFourierEnergy
     {m : ℕ} [NeZero (2 * m)] {u : ZMod (2 * m) → ℝ} (hu : MeanZero u) :
     blockEnergy (evenFourierAmp (m := m) u) =
       zmodFourierEnergy (fun x : ZMod (2 * m) ↦ (u x : ℂ)) := by
-  haveI : NeZero m := ⟨by
+  have : NeZero m := ⟨by
     intro hm
     exact (NeZero.ne (2 * m)) (by omega)⟩
   unfold zmodFourierEnergy

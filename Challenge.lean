@@ -8,7 +8,7 @@ Comparator statement for Theorem 1 (inequality only) in Xinyuan Xie and
 Haonan Zhang, *Sharp log-Sobolev inequalities and quartic stability on finite
 cyclic groups*, arXiv:2606.02847v4.
 
-The proof is in `CyclicLsi.MainTheorem`; `sorry` here marks the Comparator target.
+The proof is in `Solution`; `sorry` here marks the Comparator target.
 -/
 
 public section

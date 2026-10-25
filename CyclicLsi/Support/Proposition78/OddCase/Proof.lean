@@ -188,7 +188,7 @@ theorem odd_weightedB1_le {m : ℕ} {a : Fin m → ℝ} :
   by_cases hm0 : m = 0
   · subst m
     simp [oddWeightedB1, blockQsq, oddWeightedSum]
-  haveI : NeZero m := ⟨hm0⟩
+  have : NeZero m := ⟨hm0⟩
   let F : Fin m → ℝ := fun r ↦ √(r.val : ℝ) * a r
   let G : Fin m → ℝ := fun r ↦
     if h : r.val = 0 then
@@ -213,7 +213,7 @@ theorem odd_weightedB1_le {m : ℕ} {a : Fin m → ℝ} :
       have : 0 < r.val.val := Nat.pos_of_ne_zero r.property
       exact_mod_cast this
     dsimp [F, G]
-    rw [if_neg r.property]
+    rw [ite_eq_right r.property]
     field_simp [(Real.sqrt_pos.2 hrpos).ne']
   have hFsq :
       ∑ r : Fin m, F r ^ 2 = blockQsq a := by
@@ -232,7 +232,7 @@ theorem odd_weightedB1_le {m : ℕ} {a : Fin m → ℝ} :
         have : 0 < r.val := Nat.pos_of_ne_zero h0
         exact_mod_cast this
       dsimp [G]
-      rw [if_neg h0, if_neg h0]
+      rw [ite_eq_right h0, ite_eq_right h0]
       change ((3 * oddL a r + oddR a r) / √(r.val : ℝ)) ^ 2 =
         (3 * oddL a r + oddR a r) ^ 2 / (r.val : ℝ)
       rw [div_pow, Real.sq_sqrt hrpos.le]
@@ -426,7 +426,7 @@ theorem odd_resonance_domain_sum_eq_boundary_add_weighted {m : ℕ} (hm : 2 ≤ 
     (∑ d : OddResonanceDomain m, oddTripleNormWeight u (oddResonanceTriple d)) =
       oddBoundaryB0 (oddFourierAmp m u) + oddWeightedB1 (oddFourierAmp m u) := by
   classical
-  haveI : NeZero m := ⟨by omega⟩
+  have : NeZero m := ⟨by omega⟩
   let a : Fin m → ℝ := oddFourierAmp m u
   have hmpos : 0 < m := by omega
   calc
@@ -450,7 +450,7 @@ theorem odd_resonance_domain_sum_eq_boundary_add_weighted {m : ℕ} (hm : 2 ≤ 
 theorem odd_blockQsq_fourierAmp_eq_zmodWordEnergyReal_sub_Ssq {m : ℕ}
     {u : ZMod (2 * m + 1) → ℝ} (hu : MeanZero u) :
     blockQsq (oddFourierAmp m u) = zmodWordEnergyReal u - Ssq u := by
-  haveI : NeZero (2 * m + 1) := ⟨by omega⟩
+  have : NeZero (2 * m + 1) := ⟨by omega⟩
   rw [odd_blockQsq_fourierAmp_eq_zmodFourierQsq hu]
   unfold zmodFourierQsq zmodWordEnergyReal
   rw [zmodFourierSsq_eq_Ssq_real]

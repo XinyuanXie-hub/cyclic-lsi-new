@@ -22,7 +22,7 @@ theorem proposition8_finWordEnergy (m : ℕ) (hm : 2 ≤ m)
     (u : Fin (2 * m + 1) → ℝ) (hu : MeanZero u) :
   |avg (fun x : Fin (2 * m + 1) ↦ u x ^ 3)| ≤
       3 * Ssq u * Real.sqrt (Qsq (finWordEnergy (2 * m + 1)) u) := by
-  haveI : NeZero (2 * m + 1) := ⟨by omega⟩
+  have : NeZero (2 * m + 1) := ⟨by omega⟩
   have h :=
     thirdMomentEstimateFor_of_zmod
       (n := 2 * m + 1) (energyZ := zmodWordEnergyReal) (proposition8 m hm) u hu

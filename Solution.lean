@@ -1,13 +1,17 @@
 module
 public import CyclicLsi.Definitions
-import CyclicLsi.Support
+import CyclicLsi
 
 /-!
-# Theorem 1
+# Solution: Theorem 1
 
 This file proves the inequality in Theorem 1 of arXiv:2606.02847v4 using
 Lemma 7 and Propositions 8–11. The Lean names `proposition6`–`proposition9`
 retain the numbering from v2.
+
+The shared definitions live in `CyclicLsi.Definitions` so the supporting proofs
+can import them without depending on this solution module. `Challenge.lean`
+states the same definitions independently for Comparator.
 
 Statement dictionary:
 
@@ -35,7 +39,7 @@ public theorem theorem1 (n : ℕ) (hn : 4 ≤ n)
       2 * ∑ k : ZMod n,
         zmodWordLength k *
           Complex.normSq (fourierCoeff (fun x : ZMod n ↦ (f x : ℂ)) k) := by
-  letI : NeZero n := ⟨by omega⟩
+  let : NeZero n := ⟨by omega⟩
   have hfin :
       ∀ n : ℕ, 4 ≤ n →
         ∀ f : Fin n → ℝ, Nonnegative f →

@@ -48,7 +48,7 @@ theorem proposition6
           avg (fun i ↦ f i ^ 2) * Real.log (avg (fun i ↦ f i ^ 2)) ≤
         2 * energy f := by
   classical
-  haveI : Nonempty (Fin n) := ⟨⟨0, hn⟩⟩
+  have : Nonempty (Fin n) := ⟨⟨0, hn⟩⟩
   intro f hf_nonneg
   change ent (fun x ↦ f x ^ 2) ≤ 2 * energy f
   let s : ℝ := avg (fun x ↦ f x ^ 2)

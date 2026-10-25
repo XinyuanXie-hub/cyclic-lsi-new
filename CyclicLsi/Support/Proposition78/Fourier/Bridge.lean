@@ -45,7 +45,7 @@ theorem zmodWordLength_neg {n : ℕ} (k : ZMod n) :
 
 theorem odd_zmodWordLength_pos_freq {m : ℕ} (j : Fin m) :
     zmodWordLength ((j.val + 1 : ℕ) : ZMod (2 * m + 1)) = (j.val + 1 : ℝ) := by
-  haveI : NeZero (2 * m + 1) := ⟨by omega⟩
+  have : NeZero (2 * m + 1) := ⟨by omega⟩
   have hhalf : j.val + 1 ≤ (2 * m + 1) / 2 := by omega
   unfold zmodWordLength
   rw [ZMod.valMinAbs_natCast_of_le_half hhalf]

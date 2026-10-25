@@ -6,8 +6,8 @@ public import CyclicLsi.Support.Proposition78.Fourier.Bridge
 /-!
 # Transport between `Fin n` and `ZMod n`
 
-The paper is naturally Fourier-analytic on `ZMod n`, while the existing
-numbered statements in `MainTheorem.lean` are stated for functions on `Fin n`.
+The paper is naturally Fourier-analytic on `ZMod n`, while the supporting
+propositions used by `Solution.lean` are stated for functions on `Fin n`.
 This file provides the finite-equivalence bridge.
 -/
 
