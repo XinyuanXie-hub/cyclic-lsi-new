@@ -16,7 +16,7 @@ Let $`\mathbb{Z}_n=\mathbb{Z}/n\mathbb{Z}`$ be the cyclic group equipped with th
 **Theorem 1.** For every $`n\geq 4`$ and every nonnegative $`f:\mathbb{Z}_n\to\mathbb{R}`$,
 
 ```math
-\mathrm{Ent}_{\pi}(f^2)\leq 2\mathcal{E}_n(f). \tag{1}
+\mathrm{Ent}_{\pi}(f^2)\leq 2\mathcal{E}_n(f). \qquad (1)
 ```
 
 Here $`\mathrm{Ent}_{\pi}(g)=\pi(g\log g)-\pi(g)\log\pi(g)`$ for nonnegative $`g`$, with natural logarithms and $`0\log 0=0`$, and the Dirichlet form is
