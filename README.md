@@ -6,7 +6,7 @@ This project uses [Lean](https://lean-lang.org/), a programming language in whic
 > *Sharp log-Sobolev inequalities and quartic stability on finite cyclic groups*,
 > [arXiv:2606.02847](https://arxiv.org/abs/2606.02847).
 
-The verification is done by [`lake comparator`](https://lean-lang.org/doc/reference/latest/Build-Tools-and-Distribution/Lake/#comparator), a command in the Lean toolchain that compiles [Challenge.lean](Challenge.lean) and [Solution.lean](Solution.lean) independently and checks whether the proof in the latter proves the theorem stated in the former using the axioms allowed in [`comparator.json`](comparator.json). To verify the correctness of the inequality, one only needs to check the statement and definitions in [Challenge.lean](Challenge.lean), review the configuration in [`comparator.json`](comparator.json), and confirm that `lake comparator` succeeds.
+The verification is done by [`lake comparator`](https://lean-lang.org/doc/reference/latest/Build-Tools-and-Distribution/Lake/#comparator), a command in the Lean toolchain that compiles [Challenge.lean](Challenge.lean) and Solution.lean independently and checks whether the proof in the latter proves the theorem stated in the former using the axioms allowed in comparator.json. To verify the correctness of the inequality, one only needs to check the statement and definitions in Challenge.lean, review the configuration in comparator.json, and confirm that `lake comparator` succeeds.
 
 ## Mathematical statement
 
