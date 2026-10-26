@@ -6,11 +6,10 @@ This project uses [Lean](https://lean-lang.org/), a programming language in whic
 > *Sharp log-Sobolev inequalities and quartic stability on finite cyclic groups*,
 > [arXiv:2606.02847](https://arxiv.org/abs/2606.02847).
 
-The verification is done by [`lake comparator`](https://lean-lang.org/doc/reference/latest/Build-Tools-and-Distribution/Lake/#comparator), a command in the Lean toolchain that compiles [Challenge.lean](Challenge.lean) and [Solution.lean](Solution.lean) independently and checks whether the proof in the latter proves the theorem stated in the former using the axioms allowed in [`comparator.json`](comparator.json).
 
 ## Mathematical statement
 
-Let $`\mathbb{Z}_n=\mathbb{Z}/n\mathbb{Z}`$ be the cyclic group equipped with the uniform probability measure $`\pi`$, so that $`\pi(g)=\frac{1}{n}\sum_{x\in\mathbb{Z}_n}g(x)`$. For every $`n\geq 4`$ and every nonnegative $`f:\mathbb{Z}_n\to\mathbb{R}`$, we verify that
+Let $`\mathbb{Z}_n=\mathbb{Z}/n\mathbb{Z}`$ be the cyclic group equipped with the uniform probability measure $`\pi`$, and denote by $`\pi(g)`$ the average $`\frac{1}{n}\sum_{x\in\mathbb{Z}_n}g(x)`$. For every $`n\geq 4`$ and every nonnegative $`f:\mathbb{Z}_n\to\mathbb{R}`$, we verify that
 
 ```math
 \mathrm{Ent}_{\pi}(f^2)\leq 2\mathcal{E}_n(f).
@@ -32,22 +31,20 @@ The constant $`2`$ is sharp by the standard perturbation argument recalled in [S
 
 ## Verification
 
-First, we translate the mathematical statement into [Lean](https://lean-lang.org/doc/reference/4.35.0/); the statement and its definitions are stored in [Challenge.lean](Challenge.lean). The proof in [Solution.lean](Solution.lean) is generated based on the argument in the paper. We then run [`lake comparator`](https://lean-lang.org/doc/reference/latest/Build-Tools-and-Distribution/Lake/#comparator), which is included in the Lean toolchain, to check this proof against the statement in `Challenge.lean`.
+The verification is done by [`lake comparator`](https://lean-lang.org/doc/reference/latest/Build-Tools-and-Distribution/Lake/#comparator), a command in the Lean toolchain that compiles [Challenge.lean](Challenge.lean) and [Solution.lean](Solution.lean) independently and checks whether the proof in the latter proves the theorem stated in the former using the axioms allowed in [`comparator.json`](comparator.json). The proof in `Solution.lean` is based on the argument in the paper.
 
-Comparator checks that the theorem statement and its referenced definitions agree on both sides, and that the proof uses only the standard axioms permitted in [comparator.json](comparator.json). It checks the proof with Lean's kernel (its proof checker) and two independent checkers, NanoDa and con-ron. Whether the translation in `Challenge.lean` expresses the intended mathematical statement remains for us to check.
+To verify the correctness of the inequality, one only needs to check that the statement and definitions in [Challenge.lean](Challenge.lean) match the [mathematical statement above](#mathematical-statement), review the configuration in [`comparator.json`](comparator.json), and confirm that `lake comparator` succeeds.
 
-To verify the correctness of the inequality, one only needs to check the statement and definitions in [Challenge.lean](Challenge.lean), review the configuration in [`comparator.json`](comparator.json), and confirm that `lake comparator` succeeds.
+This project has a GitHub workflow that uses GitHub Actions to run `lake comparator`. **To check the results, one can:**
 
-### Check the verification results
-
-1. Sign in to GitHub and open [Lean CI](https://github.com/XinyuanXie-hub/cyclic-lsi-new/actions/workflows/lean.yml). Select a completed run for the version you want to check.
+1. Sign in to GitHub and open [this completed run](https://github.com/XinyuanXie-hub/cyclic-lsi-new/actions/runs/40357079981) for commit `88e2df1`, or select another completed run from [Lean CI](https://github.com/XinyuanXie-hub/cyclic-lsi-new/actions/workflows/lean.yml).
 2. Click **Verify the Challenge against Solution**, then expand **Run Comparator with Lean, NanoDa, and con-ron**.
-3. Confirm that the job succeeded and its log says `Your solution is okay!`: all three checkers accepted the proof.
+3. Confirm that the job succeeded and the log reports acceptance by con-ron, NanoDa, and Lean, followed by `Your solution is okay!`.
 
-### Run the verification independently
+**You can also run `lake comparator` in your own fork through GitHub Actions:**
 
-1. Click [Fork](https://github.com/XinyuanXie-hub/cyclic-lsi-new/fork) → **Create fork**. In your fork, open **Actions** and enable workflows if prompted.
+1. Click [Fork](https://github.com/XinyuanXie-hub/cyclic-lsi-new/fork) → **Create fork**. In your fork, open **Actions** and enable workflows.
 2. Select **Lean CI → Run workflow**, keep **Branch: main**, and click **Run workflow**.
-3. Once it finishes, open the new run in your fork and follow steps 2–3 under [Check the verification results](#check-the-verification-results).
+3. Once it finishes, open the new run in your fork and follow steps 2–3 of the first list.
 
-[verify-comparator.sh](scripts/verify-comparator.sh) runs Comparator with all three checkers; [lean.yml](.github/workflows/lean.yml) configures GitHub to build the project and run that script.
+The GitHub workflow is defined in [lean.yml](.github/workflows/lean.yml), which configures GitHub to build the project and run [verify-comparator.sh](scripts/verify-comparator.sh), a script that runs Comparator with all three checkers: con-ron, NanoDa, and Lean.
