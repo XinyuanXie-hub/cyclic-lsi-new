@@ -9,10 +9,14 @@ This project uses [Lean](https://lean-lang.org/), a programming language in whic
 
 ## Mathematical statement
 
-Let $`\mathbb{Z}_n=\mathbb{Z}/n\mathbb{Z}`$ be the cyclic group equipped with the uniform probability measure $`\pi`$, and denote by $`\pi(g)`$ the average $`\frac{1}{n}\sum_{x\in\mathbb{Z}_n}g(x)`$. For every $`n\geq 4`$ and every nonnegative $`f:\mathbb{Z}_n\to\mathbb{R}`$, we verify that
+Let $`\mathbb{Z}_n=\mathbb{Z}/n\mathbb{Z}`$ be the cyclic group equipped with the uniform probability measure $`\pi`$, and denote by $`\pi(g)`$ the average $`\frac{1}{n}\sum_{x\in\mathbb{Z}_n}g(x)`$.
+
+<a name="theorem-1"></a>
+
+**Theorem 1.** For every $`n\geq 4`$ and every nonnegative $`f:\mathbb{Z}_n\to\mathbb{R}`$,
 
 ```math
-\mathrm{Ent}_{\pi}(f^2)\leq 2\mathcal{E}_n(f).
+\mathrm{Ent}_{\pi}(f^2)\leq 2\mathcal{E}_n(f). \tag{1}
 ```
 
 Here $`\mathrm{Ent}_{\pi}(g)=\pi(g\log g)-\pi(g)\log\pi(g)`$ for nonnegative $`g`$, with natural logarithms and $`0\log 0=0`$, and the Dirichlet form is
@@ -33,11 +37,11 @@ The constant $`2`$ is sharp by the standard perturbation argument recalled in [S
 
 The verification is done by [`lake comparator`](https://lean-lang.org/doc/reference/latest/Build-Tools-and-Distribution/Lake/#comparator), a command in the Lean toolchain that compiles [Challenge.lean](Challenge.lean) and [Solution.lean](Solution.lean) independently and checks whether the proof in the latter proves the theorem stated in the former using the axioms allowed in [`comparator.json`](comparator.json). The proof in `Solution.lean` is based on the argument in the paper.
 
-To verify the correctness of the inequality, one only needs to check that the statement and definitions in [Challenge.lean](Challenge.lean) match the [mathematical statement above](#mathematical-statement), review the configuration in [`comparator.json`](comparator.json), and confirm that `lake comparator` succeeds.
+To verify the correctness of the inequality, one only needs to check that the statement and definitions in [Challenge.lean](Challenge.lean) match the definitions and [Theorem 1](#theorem-1) stated above, review the configuration in [`comparator.json`](comparator.json), and confirm that `lake comparator` succeeds.
 
-This project has a GitHub workflow that uses GitHub Actions to run `lake comparator`. **To check the results, one can:**
+To check the results of `lake comparator`, this project provides a GitHub workflow that uses GitHub Actions to run it, and **one can check the results as follows:**
 
-1. Sign in to GitHub and open [this completed run](https://github.com/XinyuanXie-hub/cyclic-lsi-new/actions/runs/40357079981) for commit `88e2df1`, or select another completed run from [Lean CI](https://github.com/XinyuanXie-hub/cyclic-lsi-new/actions/workflows/lean.yml).
+1. Sign in to GitHub, open the **Actions** tab and open the first record, or open it directly from [here](https://xinyuanxie-hub.github.io/cyclic-lsi-new/latest-run/).
 2. Click **Verify the Challenge against Solution**, then expand **Run Comparator with Lean, NanoDa, and con-ron**.
 3. Confirm that the job succeeded and the log reports acceptance by con-ron, NanoDa, and Lean, followed by `Your solution is okay!`.
 
