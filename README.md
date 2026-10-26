@@ -1,6 +1,6 @@
 # Sharp log-Sobolev inequality on finite cyclic groups
 
-This project uses [Lean](https://lean-lang.org/), a programming language in which a computer can verify mathematical proofs, to verify the sharp log-Sobolev inequality on finite cyclic groups in Theorem 1 of:
+This project uses [Lean](https://lean-lang.org/), a programming language in which a computer can verify mathematical proofs, to verify the sharp log-Sobolev inequality in Theorem 1 of:
 
 > Xinyuan Xie and Haonan Zhang,
 > *Sharp log-Sobolev inequalities and quartic stability on finite cyclic groups*,
