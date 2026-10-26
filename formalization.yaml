@@ -22,7 +22,7 @@ sources:
 
 automation:
   methods:
-    - method: "copilot"
+    - method: "agent"
 
 review:
-  status: "author-verified"
+  status: "human-authored-statement-and-definitions"
