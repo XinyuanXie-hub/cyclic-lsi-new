@@ -11,22 +11,6 @@ permissions:
   contents: read
 
 jobs:
-  build:
-    name: Build Lean project
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out source code
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
-        with:
-          persist-credentials: false
-
-      - name: Set up Lean and build Challenge and Solution
-        uses: leanprover/lean-action@38fbc41a8c28c4cbaec22d7f7de508ec2e7c0dd9
-        with:
-          auto-config: false
-          build: true
-          build-args: Challenge Solution
-
   comparator:
     name: Verify the Challenge against Solution
     runs-on: ubuntu-24.04

@@ -42,13 +42,13 @@ To verify the correctness of the inequality, one only needs to check that the st
 To check the results of `lake comparator`, this project provides a GitHub workflow that uses GitHub Actions to run it, and one can check the results as follows:
 
 1. Sign in to GitHub, open the “Actions” tab, then open the first workflow run listed there, or open it directly from [here](https://xinyuanxie-hub.github.io/cyclic-lsi-new/latest-run/).
-2. Click **Verify the Challenge against Solution**, then expand **Run Comparator with Lean, NanoDa, and con-ron**.
+2. Click “Verify the Challenge against Solution”, then expand “Run Comparator with Lean, NanoDa, and con-ron”.
 3. Check that the job succeeded and the log reports acceptance by con-ron, NanoDa, and Lean, followed by `Your solution is okay!`.
 
 **You can also run `lake comparator` in your own fork through GitHub Actions:**
 
-1. Click [Fork](https://github.com/XinyuanXie-hub/cyclic-lsi-new/fork) → **Create fork**. In your fork, open **Actions** and enable workflows.
-2. Select **Lean CI → Run workflow**, keep **Branch: main**, and click **Run workflow**.
+1. Click “[Fork](https://github.com/XinyuanXie-hub/cyclic-lsi-new/fork)” → “Create fork”. In your fork, open “Actions” and enable workflows.
+2. Select “Lean CI” → “Run workflow”, keep “Branch: main”, and click “Run workflow”.
 3. Once it finishes, open the new run in your fork and follow steps 2–3 of the first list.
 
-The GitHub workflow is defined in [lean.yml](.github/workflows/lean.yml), which configures GitHub to build the project and run [verify-comparator.sh](scripts/verify-comparator.sh), a script that runs Comparator with all three checkers: con-ron, NanoDa, and Lean.
+The GitHub workflow is defined in [lean.yml](.github/workflows/lean.yml), which configures GitHub to run [verify-comparator.sh](scripts/verify-comparator.sh), a script that runs Comparator with all three checkers: con-ron, NanoDa, and Lean.
