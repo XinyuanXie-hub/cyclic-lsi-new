@@ -34,10 +34,10 @@ where
 The constant $`2`$ is sharp by the standard perturbation argument recalled in [Section 5 of the paper](https://arxiv.org/html/2606.02847#S5), and the formalization here concerns only the inequality part.
 
 ## Verification
-
+<!--
 The verification is done by [`lake comparator`](https://lean-lang.org/doc/reference/latest/Build-Tools-and-Distribution/Lake/#comparator), a command in the Lean toolchain that compiles [Challenge.lean](Challenge.lean) and [Solution.lean](Solution.lean) independently and checks whether the proof in the latter proves the theorem stated in the former using the axioms allowed in [`comparator.json`](comparator.json).
-
-To verify the correctness of the inequality, one only needs to check that the statement and definitions in [Challenge.lean](Challenge.lean) match the definitions and statements for [Theorem 1](#theorem-1) stated above, review the configuration in [`comparator.json`](comparator.json), and confirm that `lake comparator` succeeds.
+-->
+To verify the correctness of the inequality, one only needs to check that the statement and definitions in [Challenge.lean](Challenge.lean) match the definitions and statements for [Theorem 1](#theorem-1) stated above, <!--review the configuration in [`comparator.json`](comparator.json),--> and confirm that `lake comparator` succeeds.
 
 To check the results of `lake comparator`, this project provides a GitHub workflow that uses GitHub Actions to run it, and one can check the results as follows:
 
