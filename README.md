@@ -45,6 +45,9 @@ The resulst of `lake comparator` can be checked throguh the GitHub workflow prov
 2. Click “Verify the Challenge against Solution”, then expand “Run Comparator with Lean, NanoDa, and con-ron”.
 3. Check that the log (lines 50–57) reports acceptance by con-ron, NanoDa, and Lean, followed by `Your solution is okay!`.
 
+
+Note: Here, we use the [“gold standard”](https://lean-lang.org/doc/reference/latest/ValidatingProofs/#validating-comparator) for validating proofs in Lean, and we refer readers to [“Challenges and External Checkers”](https://lean-lang.org/doc/reference/latest/Build-Tools-and-Distribution/Lake/#lake-comparator) for details on how it works.
+
 <!--
 **You can also run `lake comparator` in your own fork through GitHub Actions:**
 
