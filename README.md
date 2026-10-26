@@ -37,7 +37,7 @@ The constant $`2`$ is sharp by the standard perturbation argument recalled in [S
 <!--
 The verification is done by [`lake comparator`](https://lean-lang.org/doc/reference/latest/Build-Tools-and-Distribution/Lake/#comparator), a command in the Lean toolchain that compiles [Challenge.lean](Challenge.lean) and [Solution.lean](Solution.lean) independently and checks whether the proof in the latter proves the theorem stated in the former using the axioms allowed in [`comparator.json`](comparator.json).
 -->
-To verify the correctness of the inequality, one only needs to check that the statement and definitions in [Challenge.lean](Challenge.lean) match the [Theorem 1](#theorem-1) stated above, <!--review the configuration in [`comparator.json`](comparator.json),--> and confirm that `lake comparator` succeeds.
+To verify the correctness of the inequality in Lean, one only needs to check that the statement and definitions in [Challenge.lean](Challenge.lean) match the [Theorem 1](#theorem-1) stated above, <!--review the configuration in [`comparator.json`](comparator.json),--> and confirm that `lake comparator` succeeds.
 
 The resulst of `lake comparator` can be checked throguh the GitHub workflow provided by this project as follows:
 
@@ -51,6 +51,8 @@ The resulst of `lake comparator` can be checked throguh the GitHub workflow prov
 1. Click “[Fork](https://github.com/XinyuanXie-hub/cyclic-lsi-new/fork)” → “Create fork”. In your fork, open “Actions” and enable workflows.
 2. Select “Lean CI” → “Run workflow”, keep “Branch: main”, and click “Run workflow”.
 3. Once it finishes, open the new run in your fork and follow steps 2–3 of the first list.
--->
+
 
 Note: the GitHub workflow is defined in [lean.yml](.github/workflows/lean.yml), which configures GitHub to run [verify-comparator.sh](scripts/verify-comparator.sh), a script that runs Comparator with all three checkers: con-ron, NanoDa, and Lean.
+
+-->
