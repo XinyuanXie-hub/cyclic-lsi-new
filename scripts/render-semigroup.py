@@ -3,18 +3,23 @@
 
 Run from the repository root: python3 scripts/render-semigroup.py
 Multiplier and jump rates: https://arxiv.org/html/2606.02847#S1.E1.
-Both cycles start with a unit point mass at 0. Disk areas encode site masses.
+Both cycles start with a unit point mass at 0. Disk areas are proportional to site masses;
+small hollow background markers keep every site visible even at zero mass.
 All positive-mass disks have the same color. Straight arrows encode the sign
 and magnitude of q(y-x)(p(x)-p(y)); width and darkness use one fixed logarithmic
-scale across both sizes and all frames. The first cycle has 30% larger
-arrowheads; the shared width-to-flux scale is unchanged. Flows below display resolution are
-omitted; arrowheads are omitted on faint or very short visible segments.
+strength scale across both sizes and all frames, rather than a linear flux scale.
+Weak arrows fade smoothly near the display cutoff. The first cycle has 30%
+larger arrowheads. Flows below display resolution are
+omitted; every visible flow has an arrowhead. The displayed odd cycles have
+nonzero direct jump rates from the origin to every other site.
 All transfers enter the actual dynamics and energy calculation.
 The graph shows Ent_pi(rho_t) / E_n(sqrt(rho_t)), rho_t = n p_t.
 It is a numerical illustration, not a proof. The equilibrium ratio is 0/0;
 the plotted finite-time ratios approach 2. Playback slows the early evolution
 by sampling mathematical time nonuniformly. Both animations use the same
-sample times and durations; browsers may start separate GIFs at different times.
+sample times and durations, with a five-second initial hold. The evolution
+continues until every flow is below display resolution, then holds for three
+seconds; browsers may start separate GIFs at different times.
 """
 
 from math import cos, hypot, log, log1p, pi, sin
@@ -28,30 +33,33 @@ from PIL import Image, ImageDraw, ImageFont
 
 
 ROOT = Path(__file__).resolve().parents[1]
-SIZES = (6, 20)
-DIAGRAM_WIDTH, DIAGRAM_HEIGHT = 720, 430
+SIZES = (5, 21)
+DIAGRAM_WIDTH, DIAGRAM_HEIGHT = 720, 350
 PLOT_WIDTH, PLOT_HEIGHT = 640, 350
-END_TIME = 7.0
-FRAME_COUNT = 300
-FRAME_DURATION_MS = 70
+END_TIME = 11.0
+# More samples at 33 fps preserve the roughly 26-second evolution between holds.
+FRAME_COUNT = 876
+FRAME_DURATION_MS = 30
+INITIAL_HOLD_MS = 5000
+FINAL_HOLD_MS = 3000
 SCALE = 4
 EXPORT_SCALE = 2
 RING_RADIUS = 123
-MASS_RADIUS = 30
-CENTERS = ((180, 203), (540, 203))
+MASS_RADIUS = 18
+SITE_RADIUS = 2.8
+CENTERS = ((180, 154), (540, 154))
 ARROWHEAD_SCALES = (1.3, 1.0)
-# A visual stage: exact uniformity is reached only as t tends to infinity.
-EQUILIBRIUM_DISPLAY_TOLERANCE = 0.01
 WHITE = (255, 255, 255)
 INK = (31, 41, 55)
 GUIDE = (196, 204, 213)
 BLUE = (21, 53, 75)
-FLOW_COLOR = (213, 94, 0)
+FLOW_COLOR = (191, 73, 4)
 PLOT_COLORS = ("#0072b2", "#d55e00")
 PLOT_STYLES = ("-", (0, (5, 3)))
 PLOT_MARKERS = ("o", "D")
 FLOW_REFERENCE = 0.0001
-MIN_FLOW_VISIBILITY = 0.15
+MIN_FLOW_VISIBILITY = 0.005
+FULL_FLOW_VISIBILITY = 0.04
 
 
 class HeatEvolution:
@@ -153,6 +161,9 @@ def check_model(model):
     assert np.all((ratios > 0) & (ratios < 2))
     assert np.all(np.diff(ratios) >= 0)
     assert 0 < 2 - ratios[-1] < 1e-6
+    final_flows = model.net_flows(model.distribution(END_TIME))
+    final_visibility = np.log1p(np.abs(final_flows) / FLOW_REFERENCE) / FLOW_LOG_SCALE
+    assert np.all(final_visibility < MIN_FLOW_VISIBILITY), "Animation ends with visible flows"
     print(f"n={n}: R(0)={ratios[0]:.10f}, R({END_TIME:g})={ratios[-1]:.10f}")
 
 
@@ -161,13 +172,13 @@ class RatioPlot:
         self.times = END_TIME * np.linspace(0, 1, 500) ** 2
         self.figure = Figure(figsize=(PLOT_WIDTH / 100, PLOT_HEIGHT / 100), dpi=100 * SCALE)
         self.canvas = FigureCanvasAgg(self.figure)
-        axes = self.figure.add_axes((0.13, 0.21, 0.81, 0.65))
+        axes = self.figure.add_axes((0.14, 0.21, 0.80, 0.73))
         axes.set_xlim(0, END_TIME)
         axes.set_ylim(0, 2.22)
-        axes.set_xticks((0, 2, 4, 6))
+        axes.set_xticks(np.arange(0, END_TIME + 1, 2))
         axes.set_yticks((0, 1, 2))
         axes.set_xlabel(r"$t$", fontsize=16, color="#39424d", labelpad=8)
-        axes.set_title(r"$R_n(t)$", fontsize=18, color="#39424d", pad=14)
+        axes.set_ylabel(r"$R_n(t)$", fontsize=18, color="#39424d", labelpad=10)
         axes.spines[["top", "right"]].set_visible(False)
         for edge in ("left", "bottom"):
             axes.spines[edge].set_color("#b9c1ca")
@@ -244,17 +255,10 @@ def render_heat(t):
     for model, center, arrowhead_scale in zip(MODELS, CENTERS, ARROWHEAD_SCALES):
         p = model.distribution(t)
         check_distribution(model, p)
-        if t == 0:
-            phase = "Initial"
-        elif np.max(np.abs(model.n * p - 1)) <= EQUILIBRIUM_DISPLAY_TOLERANCE:
-            phase = "Equilibrium"
-        else:
-            phase = "Spreading"
-        label(phase, center[0], 23, size=22, bold=True)
         locations = sites(model.n, center)
         radii = MASS_RADIUS * np.sqrt(p)
         disk(center, RING_RADIUS, None, GUIDE, 0.8)
-        label(f"n = {model.n}", center[0], 394, size=24)
+        label(f"n = {model.n}", center[0], 317, size=24)
         signed_flows = model.net_flows(p)
         # Faint transfers first, so stronger transfers remain visible at crossings.
         for index in np.argsort(np.abs(signed_flows)):
@@ -268,28 +272,35 @@ def render_heat(t):
             start, end = locations[x], locations[y]
             distance = hypot(end[0] - start[0], end[1] - start[1])
             ux, uy = (end[0] - start[0]) / distance, (end[1] - start[1]) / distance
-            start_margin, end_margin = max(1.4, radii[x]) + 0.4, max(1.4, radii[y]) + 0.7
+            start_margin = max(SITE_RADIUS, radii[x]) + 0.8
+            end_margin = max(SITE_RADIUS, radii[y]) + 1.2
             available = distance - start_margin - end_margin
             if available < 2:
                 continue
             a = (start[0] + ux * start_margin, start[1] + uy * start_margin)
             b = (end[0] - ux * end_margin, end[1] - uy * end_margin)
-            color = mix(WHITE, FLOW_COLOR, visibility ** 0.6)
-            width = 0.65 + 4 * visibility
+            # Keep weak indirect transfers readable, while a nonlinear width
+            # gives the dominant transfers more contrast on the same fixed scale.
+            # A smooth fade avoids arrows popping on/off at the cutoff. It uses
+            # the same absolute-flow scale in every panel and every frame.
+            fade = min(1.0, (visibility - MIN_FLOW_VISIBILITY) /
+                       (FULL_FLOW_VISIBILITY - MIN_FLOW_VISIBILITY))
+            opacity = fade ** 2 * (3 - 2 * fade)
+            color = mix(WHITE, FLOW_COLOR, opacity * (0.55 + 0.45 * visibility ** 1.5))
+            width = 0.8 + 4.2 * visibility ** 4
             line([a, b], color, width)
-            if visibility >= 0.30 and available >= 15:
-                length = (4 + 5 * visibility) * arrowhead_scale
-                half_width = (2 + 1.5 * visibility) * arrowhead_scale
-                arrow = [b, (b[0] - ux * length - uy * half_width,
-                              b[1] - uy * length + ux * half_width),
-                         (b[0] - ux * length + uy * half_width,
-                          b[1] - uy * length - ux * half_width)]
-                draw.polygon([(round(x * SCALE), round(y * SCALE)) for x, y in arrow], fill=color)
-        # Draw smaller disks first to keep the concentrated mass easy to follow.
+            length = min((4 + 5 * visibility) * arrowhead_scale, available * 0.45)
+            half_width = (1.5 + 1.5 * visibility) * arrowhead_scale
+            arrow = [b, (b[0] - ux * length - uy * half_width,
+                          b[1] - uy * length + ux * half_width),
+                     (b[0] - ux * length + uy * half_width,
+                      b[1] - uy * length - ux * half_width)]
+            draw.polygon([(round(x * SCALE), round(y * SCALE)) for x, y in arrow], fill=color)
+        # Site markers are a separate backdrop, never a floor on encoded mass.
+        for location in locations:
+            disk(location, SITE_RADIUS, WHITE, GUIDE, 0.7)
         for index in np.argsort(p):
-            if p[index] < 1e-12:
-                disk(locations[index], 1.4 if model.n > 10 else 3.2, WHITE, GUIDE, 0.7)
-            else:
+            if p[index] > 0:
                 disk(locations[index], radii[index], BLUE, mix(BLUE, INK, 0.2), 0.6)
 
     return image.resize((DIAGRAM_WIDTH * EXPORT_SCALE, DIAGRAM_HEIGHT * EXPORT_SCALE),
@@ -301,7 +312,8 @@ def export_animation(name, render_frame, times):
     output.mkdir(exist_ok=True)
     snapshot = render_frame(0.7)
     snapshot.save(output / f"{name}.png", optimize=True)
-    sample_indices = (0, 30, 70, 130, 210, FRAME_COUNT - 1)
+    # Sample the full evolution even when the animation frame count changes.
+    sample_indices = np.linspace(0, len(times) - 1, 8, dtype=int)
     exported_width, exported_height = snapshot.size
     sample = Image.new("RGB", (exported_width, exported_height * len(sample_indices)), WHITE)
     for row, i in enumerate(sample_indices):
@@ -323,7 +335,7 @@ def export_animation(name, render_frame, times):
     frames = indexed_frames()
     first = next(frames)
     durations = [FRAME_DURATION_MS] * FRAME_COUNT
-    durations[0], durations[-1] = 2000, 3000
+    durations[0], durations[-1] = INITIAL_HOLD_MS, FINAL_HOLD_MS
     destination = output / f"{name}.gif"
     first.save(destination, save_all=True, append_images=frames,
                     duration=durations, loop=0, disposal=1, optimize=True)
