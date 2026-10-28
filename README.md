@@ -8,11 +8,17 @@ This project uses [Lean](https://lean-lang.org/), a programming language in whic
 
 <p align="center">
   <a href="assets/word-length-semigroup.png">
-    <img src="assets/word-length-semigroup.gif" width="800" alt="Mass spreading around a nine-site cycle, alongside a synchronized plot of relative entropy divided by the Dirichlet energy of the square-root density. The ratio approaches the sharp bound 2 from below.">
+    <img src="assets/word-length-semigroup.gif" width="1100" alt="Heat evolving on cycles with n = 4 and n = 100, alongside their synchronized ratios R_n(t), approaching 2 from below.">
   </a>
 </p>
 
-*Mass spreading under the word-length semigroup on nine sites. Disk area represents mass; darker blue segments indicate greater net transfer rates. The plot shows relative entropy divided by the Dirichlet energy of the square-root density. Along this evolution, the ratio approaches the sharp bound 2.*
+*A probability mass of heat with density $`\rho_t`$, initially concentrated at the origin, evolving according to the Laplacian $`A_n`$ defined below.*
+
+```math
+R_n(t)=\frac{\mathrm{Ent}_{\pi}(\rho_t)}{\mathcal E_n(\sqrt{\rho_t})}.
+```
+
+$`\mathrm{Ent}_{\pi}(\rho_t)`$ and $`\mathcal E_n(\sqrt{\rho_t})`$ are the relative entropy and the Dirichlet energy. The comparison of these two quantities is addressed in the following theorem.
 
 ## Mathematical statement
 
@@ -37,6 +43,14 @@ where
 ```math
 \widehat f(k)=\frac{1}{n}\sum_{x=0}^{n-1}f(x)e^{-2\pi i kx/n}.
 ```
+
+The Laplacian in the animation is
+
+```math
+A_nf(x)=\sum_{k=0}^{n-1}\min(k,n-k)\,\widehat f(k)e^{2\pi i kx/n},
+```
+
+with $`\partial_t\rho_t=-A_n\rho_t`$ and $`\rho_0=n\mathbf{1}_{\{0\}}`$.
 
 The constant $`2`$ is sharp by the standard perturbation argument recalled in [Section 5 of the paper](https://arxiv.org/html/2606.02847#S5), and the formalization here concerns only the inequality part.
 
