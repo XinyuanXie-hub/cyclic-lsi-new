@@ -14,7 +14,7 @@ This project uses [Lean](https://lean-lang.org/), a programming language in whic
 
 *The heat density at the origin spreads along the finite cycle until all nodes reach the same temperature. The heat tranfer dynamics here are governed by the word-length Laplacian $`-A_{\psi_n}`$.*
 
-The inequality we verified here proves the optimal bound on ratio of the relative entropy and the Dirichlet energy for that dynamics.
+The inequality we verified here proves the optimal bound on the ratio of the relative entropy and the Dirichlet energy for that dynamics.
 
 <!--
 ```math
