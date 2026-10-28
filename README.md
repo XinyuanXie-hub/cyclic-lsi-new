@@ -8,17 +8,23 @@ This project uses [Lean](https://lean-lang.org/), a programming language in whic
 
 <p align="center">
   <a href="assets/word-length-semigroup.png">
-    <img src="assets/word-length-semigroup.gif" width="1100" alt="Heat evolving on cycles with n = 6 and n = 25, alongside their synchronized ratios R_n(t), approaching 2 from below.">
+    <img src="assets/word-length-semigroup.gif" width="900" alt="Heat initially concentrated at the origin spreads on discrete cycles with n = 6 and n = 20.">
   </a>
 </p>
 
-*A probability mass of heat with density $`\rho_t`$, initially concentrated at the origin, evolving according to the Laplacian $`A_n`$ defined below.*
+*The hot spot at the origin spreads along the discrete cycle according to the long-range interaction rule specified by $`A_{\psi}`$ (defined below), until all nodes reach the same temperature.*
+
+<p align="center">
+  <a href="assets/entropy-energy-ratio.png">
+    <img src="assets/entropy-energy-ratio.gif" width="760" alt="The entropy-to-energy ratios R_n(t) for n = 6 and n = 20 approach 2 from below.">
+  </a>
+</p>
 
 ```math
 R_n(t)=\frac{\mathrm{Ent}_{\pi}(\rho_t)}{\mathcal E_n(\sqrt{\rho_t})}.
 ```
 
-$`\mathrm{Ent}_{\pi}(\rho_t)`$ and $`\mathcal E_n(\sqrt{\rho_t})`$ are the relative entropy and the Dirichlet energy. The comparison of these two quantities is addressed in the following theorem.
+Here $`\rho_t`$ is the heat density; $`\mathrm{Ent}_{\pi}(\rho_t)`$ and $`\mathcal E_n(\sqrt{\rho_t})`$ are the relative entropy and the Dirichlet energy. The plotted ratio approaches $`2`$ from below; the following theorem shows that it cannot exceed $`2`$.
 
 ## Mathematical statement
 
@@ -47,10 +53,10 @@ where
 The Laplacian in the animation is
 
 ```math
-A_nf(x)=\sum_{k=0}^{n-1}\min(k,n-k)\,\widehat f(k)e^{2\pi i kx/n},
+A_{\psi}f(x)=\sum_{k=0}^{n-1}\min(k,n-k)\,\widehat f(k)e^{2\pi i kx/n},
 ```
 
-with $`\partial_t\rho_t=-A_n\rho_t`$ and $`\rho_0=n\mathbf{1}_{\{0\}}`$.
+with $`\partial_t\rho_t=-A_{\psi}\rho_t`$ and $`\rho_0=n\mathbf{1}_{\{0\}}`$.
 
 The constant $`2`$ is sharp by the standard perturbation argument recalled in [Section 5 of the paper](https://arxiv.org/html/2606.02847#S5), and the formalization here concerns only the inequality part.
 

@@ -1,18 +1,20 @@
 #!/usr/bin/env python3
-"""Render the README animation (requires NumPy, Pillow, and Matplotlib).
+"""Render the README animations (requires NumPy, Pillow, and Matplotlib).
 
 Run from the repository root: python3 scripts/render-semigroup.py
 Multiplier and jump rates: https://arxiv.org/html/2606.02847#S1.E1.
 Both cycles start with a unit point mass at 0. Disk areas encode site masses.
 All positive-mass disks have the same color. Straight arrows encode the sign
 and magnitude of q(y-x)(p(x)-p(y)); width and darkness use one fixed logarithmic
-scale across both sizes and all frames. Flows below display resolution are
+scale across both sizes and all frames. The first cycle has 30% larger
+arrowheads; the shared width-to-flux scale is unchanged. Flows below display resolution are
 omitted; arrowheads are omitted on faint or very short visible segments.
 All transfers enter the actual dynamics and energy calculation.
 The graph shows Ent_pi(rho_t) / E_n(sqrt(rho_t)), rho_t = n p_t.
 It is a numerical illustration, not a proof. The equilibrium ratio is 0/0;
 the plotted finite-time ratios approach 2. Playback slows the early evolution
-by sampling mathematical time nonuniformly; graph markers show the common time.
+by sampling mathematical time nonuniformly. Both animations use the same
+sample times and durations; browsers may start separate GIFs at different times.
 """
 
 from math import cos, hypot, log, log1p, pi, sin
@@ -26,9 +28,9 @@ from PIL import Image, ImageDraw, ImageFont
 
 
 ROOT = Path(__file__).resolve().parents[1]
-SIZES = (6, 25)
-DIAGRAM_WIDTH, PLOT_WIDTH, HEIGHT = 720, 500, 430
-WIDTH = DIAGRAM_WIDTH + PLOT_WIDTH
+SIZES = (6, 20)
+DIAGRAM_WIDTH, DIAGRAM_HEIGHT = 720, 430
+PLOT_WIDTH, PLOT_HEIGHT = 640, 350
 END_TIME = 7.0
 FRAME_COUNT = 300
 FRAME_DURATION_MS = 70
@@ -37,6 +39,9 @@ EXPORT_SCALE = 2
 RING_RADIUS = 123
 MASS_RADIUS = 30
 CENTERS = ((180, 203), (540, 203))
+ARROWHEAD_SCALES = (1.3, 1.0)
+# A visual stage: exact uniformity is reached only as t tends to infinity.
+EQUILIBRIUM_DISPLAY_TOLERANCE = 0.01
 WHITE = (255, 255, 255)
 INK = (31, 41, 55)
 GUIDE = (196, 204, 213)
@@ -154,7 +159,7 @@ def check_model(model):
 class RatioPlot:
     def __init__(self):
         self.times = END_TIME * np.linspace(0, 1, 500) ** 2
-        self.figure = Figure(figsize=(PLOT_WIDTH / 100, HEIGHT / 100), dpi=100 * SCALE)
+        self.figure = Figure(figsize=(PLOT_WIDTH / 100, PLOT_HEIGHT / 100), dpi=100 * SCALE)
         self.canvas = FigureCanvasAgg(self.figure)
         axes = self.figure.add_axes((0.13, 0.21, 0.81, 0.65))
         axes.set_xlim(0, END_TIME)
@@ -208,8 +213,10 @@ def sites(n, center):
              center[1] - RING_RADIUS * cos(2 * pi * k / n)) for k in range(n)]
 
 
-def font(size):
-    for candidate in ("DejaVuSans.ttf", "/System/Library/Fonts/Supplemental/Arial.ttf"):
+def font(size, bold=False):
+    candidates = (("DejaVuSans-Bold.ttf", "/System/Library/Fonts/Supplemental/Arial Bold.ttf")
+                  if bold else ("DejaVuSans.ttf", "/System/Library/Fonts/Supplemental/Arial.ttf"))
+    for candidate in candidates:
         try:
             return ImageFont.truetype(candidate, size * SCALE)
         except OSError:
@@ -217,8 +224,8 @@ def font(size):
     return ImageFont.load_default(size=size * SCALE)
 
 
-def render(t, ratio_plot=None):
-    image = Image.new("RGB", (WIDTH * SCALE, HEIGHT * SCALE), WHITE)
+def render_heat(t):
+    image = Image.new("RGB", (DIAGRAM_WIDTH * SCALE, DIAGRAM_HEIGHT * SCALE), WHITE)
     draw = ImageDraw.Draw(image)
 
     def line(points, color, width=1):
@@ -231,12 +238,19 @@ def render(t, ratio_plot=None):
                       (round((x + radius) * SCALE), round((y + radius) * SCALE))],
                      fill=fill, outline=outline, width=max(1, round(width * SCALE)))
 
-    def label(text, x, y, size=22):
-        draw.text((x * SCALE, y * SCALE), text, font=font(size), fill=INK, anchor="mm")
+    def label(text, x, y, size=22, bold=False):
+        draw.text((x * SCALE, y * SCALE), text, font=font(size, bold), fill=INK, anchor="mm")
 
-    for model, center in zip(MODELS, CENTERS):
+    for model, center, arrowhead_scale in zip(MODELS, CENTERS, ARROWHEAD_SCALES):
         p = model.distribution(t)
         check_distribution(model, p)
+        if t == 0:
+            phase = "Initial"
+        elif np.max(np.abs(model.n * p - 1)) <= EQUILIBRIUM_DISPLAY_TOLERANCE:
+            phase = "Equilibrium"
+        else:
+            phase = "Spreading"
+        label(phase, center[0], 23, size=22, bold=True)
         locations = sites(model.n, center)
         radii = MASS_RADIUS * np.sqrt(p)
         disk(center, RING_RADIUS, None, GUIDE, 0.8)
@@ -264,8 +278,8 @@ def render(t, ratio_plot=None):
             width = 0.65 + 4 * visibility
             line([a, b], color, width)
             if visibility >= 0.30 and available >= 15:
-                length = 4 + 5 * visibility
-                half_width = 2 + 1.5 * visibility
+                length = (4 + 5 * visibility) * arrowhead_scale
+                half_width = (2 + 1.5 * visibility) * arrowhead_scale
                 arrow = [b, (b[0] - ux * length - uy * half_width,
                               b[1] - uy * length + ux * half_width),
                          (b[0] - ux * length + uy * half_width,
@@ -278,23 +292,20 @@ def render(t, ratio_plot=None):
             else:
                 disk(locations[index], radii[index], BLUE, mix(BLUE, INK, 0.2), 0.6)
 
-    image.paste((ratio_plot or RatioPlot()).render(t), (DIAGRAM_WIDTH * SCALE, 0))
-    return image.resize((WIDTH * EXPORT_SCALE, HEIGHT * EXPORT_SCALE), Image.Resampling.LANCZOS)
+    return image.resize((DIAGRAM_WIDTH * EXPORT_SCALE, DIAGRAM_HEIGHT * EXPORT_SCALE),
+                        Image.Resampling.LANCZOS)
 
 
-def main():
-    for model in MODELS:
-        check_model(model)
+def export_animation(name, render_frame, times):
     output = ROOT / "assets"
     output.mkdir(exist_ok=True)
-    ratio_plot = RatioPlot()
-    times = END_TIME * np.linspace(0, 1, FRAME_COUNT) ** 2
-    render(0.7, ratio_plot).save(output / "word-length-semigroup.png", optimize=True)
+    snapshot = render_frame(0.7)
+    snapshot.save(output / f"{name}.png", optimize=True)
     sample_indices = (0, 30, 70, 130, 210, FRAME_COUNT - 1)
-    exported_width, exported_height = WIDTH * EXPORT_SCALE, HEIGHT * EXPORT_SCALE
+    exported_width, exported_height = snapshot.size
     sample = Image.new("RGB", (exported_width, exported_height * len(sample_indices)), WHITE)
     for row, i in enumerate(sample_indices):
-        sample.paste(render(float(times[i]), ratio_plot), (0, row * exported_height))
+        sample.paste(render_frame(float(times[i])), (0, row * exported_height))
     palette = sample.quantize(colors=256, method=Image.Quantize.MEDIANCUT)
     colors = palette.getpalette()
     white_index = max(range(256), key=lambda i: sum(colors[3 * i:3 * i + 3]))
@@ -303,7 +314,7 @@ def main():
     # Generate frames incrementally rather than retaining all high-resolution RGB frames.
     def indexed_frames():
         for t in times:
-            frame = render(float(t), ratio_plot)
+            frame = render_frame(float(t))
             indexed_frame = frame.quantize(palette=palette, dither=Image.Dither.NONE)
             white_mask = frame.convert("L").point(lambda value: 255 if value == 255 else 0)
             indexed_frame.paste(white_index, mask=white_mask)
@@ -312,8 +323,8 @@ def main():
     frames = indexed_frames()
     first = next(frames)
     durations = [FRAME_DURATION_MS] * FRAME_COUNT
-    durations[0], durations[-1] = 1000, 3000
-    destination = output / "word-length-semigroup.gif"
+    durations[0], durations[-1] = 2000, 3000
+    destination = output / f"{name}.gif"
     first.save(destination, save_all=True, append_images=frames,
                     duration=durations, loop=0, disposal=1, optimize=True)
     with Image.open(destination) as result:
@@ -321,6 +332,20 @@ def main():
         assert result.size == (exported_width, exported_height)
     print(f"Created {destination.relative_to(ROOT)} ({destination.stat().st_size:,} bytes)")
     print(f"Loop duration: {sum(durations) / 1000:.2f} seconds")
+
+
+def main():
+    for model in MODELS:
+        check_model(model)
+    times = END_TIME * np.linspace(0, 1, FRAME_COUNT) ** 2
+    export_animation("word-length-semigroup", render_heat, times)
+    ratio_plot = RatioPlot()
+
+    def render_ratio(t):
+        return ratio_plot.render(t).resize((PLOT_WIDTH * EXPORT_SCALE, PLOT_HEIGHT * EXPORT_SCALE),
+                                           Image.Resampling.LANCZOS)
+
+    export_animation("entropy-energy-ratio", render_ratio, times)
     print("Checked both evolutions, flow directions, conservation, and entropy/energy ratios.")
 
 
