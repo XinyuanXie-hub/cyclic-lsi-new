@@ -13,19 +13,10 @@
     };
   </script>
   <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script>
-  <script defer src="layout.js"></script>
 </head>
 <body>
   <header class="toolbar">
     <a class="repository-link" href="https://github.com/XinyuanXie-hub/cyclic-lsi-new">View on GitHub <span aria-hidden="true">↗</span></a>
-    <label class="layout-control" hidden>
-      Layout
-      <select id="layout" aria-describedby="layout-hint">
-        <option value="proportional">Desktop proportions</option>
-        <option value="reading">Reading view</option>
-      </select>
-    </label>
-    <p id="layout-hint" class="layout-hint" hidden>The whole page scales to fit. Pinch to zoom, or choose Reading view for larger text.</p>
   </header>
 
   <main id="page-frame" class="page-frame">
@@ -98,5 +89,17 @@
       <p>Note: Here, we use the <a href="https://lean-lang.org/doc/reference/latest/ValidatingProofs/#validating-comparator">“gold standard”</a> for validating proofs in Lean, and we refer readers to <a href="https://lean-lang.org/doc/reference/latest/Build-Tools-and-Distribution/Lake/#lake-comparator">“Challenges and External Checkers”</a> for details on how it works.</p>
     </article>
   </main>
+  <script>
+    const frame = document.getElementById('page-frame');
+    const page = document.getElementById('readme');
+    function fitPage() {
+      const scale = Math.min(1, frame.clientWidth / page.offsetWidth);
+      page.style.setProperty('--page-scale', scale);
+      frame.style.height = `${page.offsetHeight * scale}px`;
+    }
+    fitPage();
+    window.addEventListener('resize', fitPage);
+    new ResizeObserver(fitPage).observe(page);
+  </script>
 </body>
 </html>

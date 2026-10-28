@@ -11,17 +11,11 @@
 
 * { box-sizing: border-box; }
 body { margin: 0; }
-[hidden] { display: none !important; }
 a { color: #0969da; text-decoration: none; }
 a:hover { text-decoration: underline; }
-a:focus-visible, select:focus-visible { outline: 2px solid #0969da; outline-offset: 4px; }
+a:focus-visible { outline: 2px solid #0969da; outline-offset: 4px; }
 
 .toolbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 12px 20px;
   max-width: 980px;
   margin: 0 auto;
   padding: 18px 40px;
@@ -30,25 +24,13 @@ a:focus-visible, select:focus-visible { outline: 2px solid #0969da; outline-offs
 }
 
 .repository-link { font-weight: 500; }
-.layout-control { display: flex; align-items: center; gap: 8px; }
-select {
-  min-height: 36px;
-  max-width: 100%;
-  padding: 6px 28px 6px 10px;
-  border: 1px solid #d1d9e0;
-  border-radius: 6px;
-  color: inherit;
-  background-color: #f6f8fa;
-  font: inherit;
-}
-.layout-hint { flex-basis: 100%; margin: 0; color: #59636e; font-size: 13px; }
 
-.page-frame { width: 100%; max-width: 980px; margin: 0 auto; }
-.readme { width: 100%; padding: 32px 40px 40px; overflow-wrap: break-word; }
 /* Clip the unscaled layout without creating an inner scroll container for anchors. */
-html[data-layout="proportional"] .page-frame { overflow: clip; }
-html[data-layout="proportional"] .readme {
+.page-frame { width: 100%; max-width: 980px; margin: 0 auto; overflow: clip; }
+.readme {
   width: 980px;
+  padding: 32px 40px 40px;
+  overflow-wrap: break-word;
   transform-origin: top left;
   transform: scale(var(--page-scale, 1));
 }
@@ -72,15 +54,10 @@ code { padding: 0.2em 0.4em; border-radius: 6px; background: #eff1f3; font: 85% 
 
 @media (max-width: 600px) {
   .toolbar { padding: 12px 16px; }
-  .readme { padding: 24px 16px 32px; }
-  html[data-layout="proportional"] .readme { padding: 32px 40px 40px; }
-  .layout-control { gap: 6px; }
-  select { min-height: 44px; }
 }
 
 @media print {
   .toolbar { display: none; }
-  html[data-layout="proportional"] .page-frame { height: auto !important; overflow: visible; }
-  html[data-layout="proportional"] .readme { width: 100%; transform: none; }
-  .readme { padding: 0; }
+  .page-frame { height: auto !important; overflow: visible; }
+  .readme { width: 100%; padding: 0; transform: none; }
 }
