@@ -6,7 +6,7 @@ The distribution is computed from the Fourier multiplier in the paper,
 https://arxiv.org/html/2606.02847#S1.E1. Disk areas encode probabilities.
 Straight segments connect pairs of sites. Their darkness increases with the
 absolute net transfer rate q(y-x) |p(x)-p(y)| on a fixed square-root scale;
-zero transfer is white. The equilibrium panel is the infinite-time limit.
+zero transfer is white. One animated cycle shows the evolving distribution.
 The synchronized plot shows Ent_pi(rho_t) / E_n(sqrt(rho_t)), rho_t = n p_t.
 It is a numerical illustration of this trajectory, not a proof of the bound.
 """
@@ -21,13 +21,13 @@ from PIL import Image, ImageDraw, ImageFont
 
 ROOT = Path(__file__).resolve().parents[1]
 N = 9
-DIAGRAM_WIDTH, PLOT_WIDTH, HEIGHT = 960, 440, 390
+DIAGRAM_WIDTH, PLOT_WIDTH, HEIGHT = 400, 440, 390
 WIDTH = DIAGRAM_WIDTH + PLOT_WIDTH
 END_TIME = 7
 SCALE = 2
 RING_RADIUS = 108
 MASS_RADIUS = 45
-CENTERS = [(160, 181), (480, 181), (800, 181)]
+CENTER = (200, 181)
 WHITE = (255, 255, 255)
 INK = (57, 66, 77)
 GUIDE = (175, 184, 193)
@@ -210,11 +210,10 @@ def render(t, ratio_plot=None):
     def label(text, x, y, size=21, color=INK):
         draw.text((x * SCALE, y * SCALE), text, font=font(size), fill=color, anchor="mm")
 
-    for center in CENTERS:
-        disk(center, RING_RADIUS, None, GUIDE, 1)
+    disk(CENTER, RING_RADIUS, None, GUIDE, 1)
 
     # Draw every pair, weaker flows first. A fixed scale makes frames comparable.
-    locations = sites(CENTERS[1])
+    locations = sites(CENTER)
     flows = sorted((jump_rate(y - x) * abs(p[x] - p[y]), x, y)
                    for x in range(N) for y in range(x + 1, N))
     maximum_flux = max(jump_rate(r) for r in range(1, N))
@@ -224,20 +223,14 @@ def render(t, ratio_plot=None):
         darkness = sqrt(flux / maximum_flux)
         line([locations[x], locations[y]], mix(WHITE, FLOW_BLUE, darkness), 1.5)
 
-    distributions = [[1.0] + [0.0] * (N - 1), p, [1 / N] * N]
-    for center, values in zip(CENTERS, distributions):
-        for point, value in zip(sites(center), values):
-            if value < 1e-12:
-                disk(point, 4.1, WHITE, GUIDE, 1.2)
-            else:
-                disk(point, MASS_RADIUS * sqrt(value), mass_color(value), mix(mass_color(value), INK, 0.35), 1)
+    for point, value in zip(locations, p):
+        if value < 1e-12:
+            disk(point, 4.1, WHITE, GUIDE, 1.2)
+        else:
+            disk(point, MASS_RADIUS * sqrt(value), mass_color(value), mix(mass_color(value), INK, 0.35), 1)
 
-    for x in (320, 640):
-        line([(x - 25, 181), (x + 21, 181)], GUIDE, 1.3)
-        line([(x + 15, 176), (x + 21, 181), (x + 15, 186)], GUIDE, 1.3)
-    for center, text in zip(CENTERS, ("Localized", "Spreading", "Equilibrium")):
-        label(text, center[0], 337)
-    label(f"t = {t:.2f}", CENTERS[1][0], 367, size=15, color=(89, 97, 109))
+    label("Mass distribution", CENTER[0], 337)
+    label(f"t = {t:.2f}", CENTER[0], 367, size=15, color=(89, 97, 109))
     image.paste((ratio_plot or RatioPlot()).render(t), (DIAGRAM_WIDTH * SCALE, 0))
     return image.resize((WIDTH, HEIGHT), Image.Resampling.LANCZOS)
 

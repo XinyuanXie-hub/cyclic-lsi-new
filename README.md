@@ -8,7 +8,7 @@ This project uses [Lean](https://lean-lang.org/), a programming language in whic
 
 <p align="center">
   <a href="assets/word-length-semigroup.png">
-    <img src="assets/word-length-semigroup.gif" width="1000" alt="Mass spreading around a nine-site cycle, alongside a synchronized plot of relative entropy divided by the Dirichlet energy of the square-root density. The ratio approaches the sharp bound 2 from below.">
+    <img src="assets/word-length-semigroup.gif" width="800" alt="Mass spreading around a nine-site cycle, alongside a synchronized plot of relative entropy divided by the Dirichlet energy of the square-root density. The ratio approaches the sharp bound 2 from below.">
   </a>
 </p>
 
