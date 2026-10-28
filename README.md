@@ -6,6 +6,13 @@ This project uses [Lean](https://lean-lang.org/), a programming language in whic
 > *Sharp log-Sobolev inequalities and quartic stability on finite cyclic groups*,
 > [arXiv:2606.02847](https://arxiv.org/abs/2606.02847).
 
+<p align="center">
+  <a href="assets/word-length-semigroup.png">
+    <img src="assets/word-length-semigroup.gif" width="720" alt="Mass spreading from one site around a nine-site cycle toward uniform equilibrium. Disk area represents mass; darker blue segments indicate greater net transfer rates.">
+  </a>
+</p>
+
+*Mass spreading under the word-length semigroup on nine sites. Disk area represents mass; darker blue segments indicate greater net transfer rates.*
 
 ## Mathematical statement
 
