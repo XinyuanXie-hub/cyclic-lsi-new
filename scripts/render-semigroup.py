@@ -10,13 +10,12 @@ and darkness, tending to zero with flow. There are no activation thresholds,
 minimum opacities, per-panel scales, or time-dependent fades. Color rounding
 alone makes sufficiently small flows invisible. All flows enter the dynamics.
 
-The ratio plot shows Ent_pi(rho_t) / E_n(sqrt(rho_t)), rho_t = n p_t. This is a
+The second GIF shows Ent_pi(rho_t) / E_n(sqrt(rho_t)), rho_t = n p_t. This is a
 numerical illustration, not a proof; the finite-time ratio approaches 2, while
-the exact equilibrium ratio is 0/0. The README uses one GIF with the circles
-above the ratio plot, composed at the same time in every frame. Separate exports
-are also retained for reuse. Quadratic time sampling slows the early evolution.
-Playback holds the initial frame for five seconds and the final frame for three
-seconds.
+the exact equilibrium ratio is 0/0. Both GIFs use the same models, sample times,
+and durations. Quadratic time sampling slows the early evolution. Playback
+holds the initial frame for five seconds and the final frame for three seconds.
+Browsers may start separate GIFs at different times.
 """
 
 from math import cos, hypot, log, log1p, pi, sin
@@ -33,8 +32,6 @@ ROOT = Path(__file__).resolve().parents[1]
 SIZES = (5, 21)
 DIAGRAM_WIDTH, DIAGRAM_HEIGHT = 720, 350
 PLOT_WIDTH, PLOT_HEIGHT = 560, 290
-STACKED_PLOT_WIDTH = 464  # Displays at 580 px in the README's 900 px-wide image.
-STACKED_PLOT_GAP = 20
 END_TIME = 11.0
 # More samples at 33 fps preserve the roughly 26-second evolution between holds.
 FRAME_COUNT = 876
@@ -42,7 +39,7 @@ FRAME_DURATION_MS = 30
 INITIAL_HOLD_MS = 5000
 FINAL_HOLD_MS = 3000
 SCALE = 4
-EXPORT_SCALE = 2
+EXPORT_SCALE = 4
 RING_RADIUS = 123
 MASS_RADIUS = 18
 SITE_RADIUS = 2.8
@@ -296,19 +293,6 @@ def render_heat(t):
                         Image.Resampling.LANCZOS)
 
 
-def render_synchronized(t, ratio_plot):
-    """Compose both views before encoding so they share one playback clock."""
-    heat = render_heat(t)
-    plot_width = STACKED_PLOT_WIDTH * EXPORT_SCALE
-    plot_height = round(plot_width * PLOT_HEIGHT / PLOT_WIDTH)
-    plot = ratio_plot.render(t).resize((plot_width, plot_height), Image.Resampling.LANCZOS)
-    plot_top = heat.height + STACKED_PLOT_GAP * EXPORT_SCALE
-    image = Image.new("RGB", (heat.width, plot_top + plot.height), WHITE)
-    image.paste(heat, (0, 0))
-    image.paste(plot, ((heat.width - plot.width) // 2, plot_top))
-    return image
-
-
 def check_rendering(times):
     """Guard against a visible jump after the hold and unfinished final arrows."""
     initial = np.asarray(render_heat(0), dtype=float)
@@ -385,7 +369,6 @@ def main():
                                            Image.Resampling.LANCZOS)
 
     export_animation("entropy-energy-ratio", render_ratio, times)
-    export_animation("heat-and-ratio", lambda t: render_synchronized(t, ratio_plot), times)
     print("Checked both evolutions, flow directions, conservation, and entropy/energy ratios.")
 
 
