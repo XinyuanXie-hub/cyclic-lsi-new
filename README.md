@@ -14,11 +14,9 @@ This project uses [Lean](https://lean-lang.org/), a programming language in whic
 
 *The hot spot $`\rho_0`$ at the origin spreads along the discrete cycle, according to the long-range interactions specified by the word-length Laplacian $`-A_{\psi_n}`$, until all nodes reach the same temperature.*
 
-The associated Poisson semigroup is $`P_t=e^{-tA_{\psi_n}}`$, and $`\rho_t=P_t\rho_0`$, with $`\rho_0=n\mathbf{1}_{\{0\}}`$.
-
 <p align="center">
   <a href="assets/entropy-energy-ratio.png">
-    <img src="assets/entropy-energy-ratio.gif" width="760" alt="The entropy-to-energy ratios R_n(t) for n = 5 and n = 21 approach 2 from below.">
+    <img src="assets/entropy-energy-ratio.gif" width="580" alt="The entropy-to-energy ratios R_n(t) for n = 5 and n = 21 approach 2 from below.">
   </a>
 </p>
 
@@ -30,7 +28,7 @@ Here $`\rho_t`$ is the heat density evolving from the hot spot $`\rho_0`$ at tim
 
 ## Mathematical statement
 
-Let $`\mathbb Z_n=\mathbb Z/n\mathbb Z`$ carry the uniform probability measure $`\pi`$. The word-length Laplacian and its Dirichlet form are
+Let $`\mathbb Z_n=\mathbb Z/n\mathbb Z`$ be equipped with the uniform probability measure $`\pi`$. The word-length Laplacian and its Dirichlet form are
 
 ```math
 \begin{aligned}
@@ -39,9 +37,9 @@ A_{\psi_n}f(x)&=\sum_{k=0}^{n-1}\min(k,n-k)\widehat f(k)e^{2\pi i kx/n},\\
 \end{aligned}
 ```
 
-where $`\widehat f(k)=\frac1n\sum_{x\in\mathbb Z_n}f(x)e^{-2\pi i kx/n}`$ is the Fourier transform of $`f`$.
+where $`\widehat f(k)=\frac1n\sum_{x\in\mathbb Z_n}f(x)e^{-2\pi i kx/n}`$ is the Fourier transform of $`f`$ and $`\pi(g)=\frac1n\sum_{x\in\mathbb Z_n}g(x)`$ denotes the average of $`g`$.
 
-For $`g\ge0`$, define the relative entropy $`\mathrm{Ent}_\pi(g)=\pi(g\log g)-\pi(g)\log\pi(g)`$, where $`\pi(g)=\frac1n\sum_{x\in\mathbb Z_n}g(x)`$, with natural logarithms and $`0\log0=0`$.
+For $`g\ge0`$, denote by $`\mathrm{Ent}_\pi(g)=\pi(g\,\log\,g)-\pi(g)\,\log\,\pi(g)`$ the relative entropy of $`g`$, with $`\log`$ denoting the natural logarithm and $`0\,\log\,0=0`$.
 
 <a name="theorem-1"></a>
 
@@ -51,7 +49,7 @@ For $`g\ge0`$, define the relative entropy $`\mathrm{Ent}_\pi(g)=\pi(g\log g)-\p
 \mathrm{Ent}_\pi(f^2)\leq2\mathcal E_n(f).\qquad(1)
 ```
 
-Sharpness follows by a standard perturbation (see [Section 5](https://arxiv.org/html/2606.02847#S5)); only the inequality is formalized here.
+Sharpness of the constant $`2`$ follows from a standard perturbation argument (see [Section 5](https://arxiv.org/html/2606.02847#S5)), and we only formalize the inequality part here.
 
 ## Verification
 <!--

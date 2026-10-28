@@ -6,11 +6,12 @@ Multiplier and jump rates: https://arxiv.org/html/2606.02847#S1.E1.
 Both cycles start with a unit point mass at 0. Disk areas are proportional to site masses;
 small hollow background markers keep every site visible even at zero mass.
 All positive-mass disks have the same color. Straight arrows encode the sign
-and magnitude of q(y-x)(p(x)-p(y)); width and darkness use one fixed logarithmic
+and magnitude of q(y-x)(p(x)-p(y)); width and base darkness use one fixed logarithmic
 strength scale across both sizes and all frames, rather than a linear flux scale.
-Weak arrows fade smoothly near the display cutoff. The first cycle has 30%
-larger arrowheads. Flows below display resolution are
-omitted; every visible flow has an arrowhead. The displayed odd cycles have
+All nonzero flows are drawn together, with a minimum readable stroke; only
+floating-point roundoff is ignored. A common opacity fades both panels together
+near equilibrium, without rescaling arrow widths. The first cycle has 30%
+larger arrowheads. Every visible flow has an arrowhead. The displayed odd cycles have
 nonzero direct jump rates from the origin to every other site.
 All transfers enter the actual dynamics and energy calculation.
 The graph shows Ent_pi(rho_t) / E_n(sqrt(rho_t)), rho_t = n p_t.
@@ -35,7 +36,7 @@ from PIL import Image, ImageDraw, ImageFont
 ROOT = Path(__file__).resolve().parents[1]
 SIZES = (5, 21)
 DIAGRAM_WIDTH, DIAGRAM_HEIGHT = 720, 350
-PLOT_WIDTH, PLOT_HEIGHT = 640, 350
+PLOT_WIDTH, PLOT_HEIGHT = 560, 290
 END_TIME = 11.0
 # More samples at 33 fps preserve the roughly 26-second evolution between holds.
 FRAME_COUNT = 876
@@ -238,6 +239,15 @@ def font(size, bold=False):
 def render_heat(t):
     image = Image.new("RGB", (DIAGRAM_WIDTH * SCALE, DIAGRAM_HEIGHT * SCALE), WHITE)
     draw = ImageDraw.Draw(image)
+    distributions = tuple(model.distribution(t) for model in MODELS)
+    flows = tuple(model.net_flows(p) for model, p in zip(MODELS, distributions))
+    max_flow = max(float(np.max(np.abs(values))) for values in flows)
+    max_visibility = log1p(max_flow / FLOW_REFERENCE) / FLOW_LOG_SCALE
+    # Fade the complete flow field near equilibrium, not individual edges.
+    # Per-edge cutoffs otherwise delay weak flows that start simultaneously.
+    fade = np.clip((max_visibility - MIN_FLOW_VISIBILITY) /
+                   (FULL_FLOW_VISIBILITY - MIN_FLOW_VISIBILITY), 0.0, 1.0)
+    opacity = float(fade ** 2 * (3 - 2 * fade))
 
     def line(points, color, width=1):
         draw.line([(round(x * SCALE), round(y * SCALE)) for x, y in points],
@@ -252,21 +262,23 @@ def render_heat(t):
     def label(text, x, y, size=22, bold=False):
         draw.text((x * SCALE, y * SCALE), text, font=font(size, bold), fill=INK, anchor="mm")
 
-    for model, center, arrowhead_scale in zip(MODELS, CENTERS, ARROWHEAD_SCALES):
-        p = model.distribution(t)
+    for model, center, arrowhead_scale, p, signed_flows in zip(
+            MODELS, CENTERS, ARROWHEAD_SCALES, distributions, flows):
         check_distribution(model, p)
         locations = sites(model.n, center)
         radii = MASS_RADIUS * np.sqrt(p)
         disk(center, RING_RADIUS, None, GUIDE, 0.8)
         label(f"n = {model.n}", center[0], 317, size=24)
-        signed_flows = model.net_flows(p)
+        # Equal masses have zero net flow. Ignore roundoff at that equality,
+        # without using a perceptual threshold that hides weak genuine flows.
+        equality_tolerance = 16 * np.finfo(float).eps * float(p.max())
         # Faint transfers first, so stronger transfers remain visible at crossings.
         for index in np.argsort(np.abs(signed_flows)):
-            flow = float(signed_flows[index])
-            visibility = log1p(abs(flow) / FLOW_REFERENCE) / FLOW_LOG_SCALE
-            if visibility < MIN_FLOW_VISIBILITY:
-                continue
             x, y = int(model.x[index]), int(model.y[index])
+            flow = float(signed_flows[index])
+            if opacity == 0 or flow == 0 or abs(p[x] - p[y]) <= equality_tolerance:
+                continue
+            visibility = log1p(abs(flow) / FLOW_REFERENCE) / FLOW_LOG_SCALE
             if flow < 0:
                 x, y = y, x
             start, end = locations[x], locations[y]
@@ -281,11 +293,6 @@ def render_heat(t):
             b = (end[0] - ux * end_margin, end[1] - uy * end_margin)
             # Keep weak indirect transfers readable, while a nonlinear width
             # gives the dominant transfers more contrast on the same fixed scale.
-            # A smooth fade avoids arrows popping on/off at the cutoff. It uses
-            # the same absolute-flow scale in every panel and every frame.
-            fade = min(1.0, (visibility - MIN_FLOW_VISIBILITY) /
-                       (FULL_FLOW_VISIBILITY - MIN_FLOW_VISIBILITY))
-            opacity = fade ** 2 * (3 - 2 * fade)
             color = mix(WHITE, FLOW_COLOR, opacity * (0.55 + 0.45 * visibility ** 1.5))
             width = 0.8 + 4.2 * visibility ** 4
             line([a, b], color, width)
@@ -334,7 +341,7 @@ def export_animation(name, render_frame, times):
 
     frames = indexed_frames()
     first = next(frames)
-    durations = [FRAME_DURATION_MS] * FRAME_COUNT
+    durations = [FRAME_DURATION_MS] * len(times)
     durations[0], durations[-1] = INITIAL_HOLD_MS, FINAL_HOLD_MS
     destination = output / f"{name}.gif"
     first.save(destination, save_all=True, append_images=frames,
@@ -349,6 +356,7 @@ def export_animation(name, render_frame, times):
 def main():
     for model in MODELS:
         check_model(model)
+    # Keep both artifacts tied to these same models, times, and export durations.
     times = END_TIME * np.linspace(0, 1, FRAME_COUNT) ** 2
     export_animation("word-length-semigroup", render_heat, times)
     ratio_plot = RatioPlot()
