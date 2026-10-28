@@ -12,7 +12,7 @@ This project uses [Lean](https://lean-lang.org/), a programming language in whic
   </a>
 </p>
 
-*The hot spot $`\rho_0`$ at the origin spreads along the discrete cycle, according to the long-range interactions specified by the word-length Laplacian $`-A_{\psi_n}`$, until all nodes reach the same temperature.*
+*The hot spot $`\rho_0`$ at the origin spreads along the discrete cycle, according to the long-range transportation specified by the word-length Laplacian $`-A_{\psi_n}`$, until all nodes reach the same temperature.*
 
 <p align="center">
   <a href="assets/entropy-energy-ratio.png">
@@ -24,7 +24,7 @@ This project uses [Lean](https://lean-lang.org/), a programming language in whic
 R_n(t)=\frac{\mathrm{Ent}_{\pi}(\rho_t)}{\mathcal E_n(\sqrt{\rho_t})}.
 ```
 
-Here $`\rho_t`$ is the heat density evolving from the hot spot $`\rho_0`$ at time $`t`$. $`\mathrm{Ent}_{\pi}(\rho_t)`$ and $`\mathcal E_n(\sqrt{\rho_t})`$ are called the relative entropy and the Dirichlet form, measuring how far $`\rho_t`$ is from equilibrium in different ways. One can see that the plotted ratios for both simulations approach $`2`$ from below, and may wonder whether this always holds. The inequality we verify below proves this in the affirmative for arbitrary density functions.
+Here $`\rho_t`$ is the heat density evolving from $`\rho_0`$ at time $`t`$. $`\mathrm{Ent}_{\pi}(\rho_t)`$ and $`\mathcal E_n(\sqrt{\rho_t})`$ are the relative entropy and the Dirichlet form, capturing how $`\rho_t`$ varies from equilibrium information-theoretically and analytically. One may notice that the plotted ratios of these two quantities approach $`2`$ from below, and may wonder whether this upper bound always holds. The inequality we verify below proves this upper bound holds for arbitrary density functions for all $`n \geq 4`$.
 
 ## Mathematical statement
 

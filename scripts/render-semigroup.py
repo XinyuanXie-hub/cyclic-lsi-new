@@ -3,24 +3,19 @@
 
 Run from the repository root: python3 scripts/render-semigroup.py
 Multiplier and jump rates: https://arxiv.org/html/2606.02847#S1.E1.
-Both cycles start with a unit point mass at 0. Disk areas are proportional to site masses;
-small hollow background markers keep every site visible even at zero mass.
-All positive-mass disks have the same color. Straight arrows encode the sign
-and magnitude of q(y-x)(p(x)-p(y)); width and base darkness use one fixed logarithmic
-strength scale across both sizes and all frames, rather than a linear flux scale.
-All nonzero flows are drawn together, with a minimum readable stroke; only
-floating-point roundoff is ignored. A common opacity fades both panels together
-near equilibrium, without rescaling arrow widths. The first cycle has 30%
-larger arrowheads. Every visible flow has an arrowhead. The displayed odd cycles have
-nonzero direct jump rates from the origin to every other site.
-All transfers enter the actual dynamics and energy calculation.
-The graph shows Ent_pi(rho_t) / E_n(sqrt(rho_t)), rho_t = n p_t.
-It is a numerical illustration, not a proof. The equilibrium ratio is 0/0;
-the plotted finite-time ratios approach 2. Playback slows the early evolution
-by sampling mathematical time nonuniformly. Both animations use the same
-sample times and durations, with a five-second initial hold. The evolution
-continues until every flow is below display resolution, then holds for three
-seconds; browsers may start separate GIFs at different times.
+Both cycles start with unit point mass at 0. Disk area is proportional to mass.
+Hollow background markers keep empty sites visible. Arrows show signed net flow
+q(y-x)(p(x)-p(y)). One fixed, continuous logarithmic scale controls their width
+and darkness, tending to zero with flow. There are no activation thresholds,
+minimum opacities, per-panel scales, or time-dependent fades. Color rounding
+alone makes sufficiently small flows invisible. All flows enter the dynamics.
+
+The second GIF shows Ent_pi(rho_t) / E_n(sqrt(rho_t)), rho_t = n p_t. This is a
+numerical illustration, not a proof; the finite-time ratio approaches 2, while
+the exact equilibrium ratio is 0/0. Both GIFs use the same models, sample times,
+and durations. Quadratic time sampling slows the early evolution. Playback
+holds the initial frame for five seconds and the final frame for three seconds.
+Browsers may start separate GIFs at different times.
 """
 
 from math import cos, hypot, log, log1p, pi, sin
@@ -49,7 +44,6 @@ RING_RADIUS = 123
 MASS_RADIUS = 18
 SITE_RADIUS = 2.8
 CENTERS = ((180, 154), (540, 154))
-ARROWHEAD_SCALES = (1.3, 1.0)
 WHITE = (255, 255, 255)
 INK = (31, 41, 55)
 GUIDE = (196, 204, 213)
@@ -58,9 +52,7 @@ FLOW_COLOR = (191, 73, 4)
 PLOT_COLORS = ("#0072b2", "#d55e00")
 PLOT_STYLES = ("-", (0, (5, 3)))
 PLOT_MARKERS = ("o", "D")
-FLOW_REFERENCE = 0.0001
-MIN_FLOW_VISIBILITY = 0.005
-FULL_FLOW_VISIBILITY = 0.04
+FLOW_REFERENCE = 0.001
 
 
 class HeatEvolution:
@@ -162,9 +154,6 @@ def check_model(model):
     assert np.all((ratios > 0) & (ratios < 2))
     assert np.all(np.diff(ratios) >= 0)
     assert 0 < 2 - ratios[-1] < 1e-6
-    final_flows = model.net_flows(model.distribution(END_TIME))
-    final_visibility = np.log1p(np.abs(final_flows) / FLOW_REFERENCE) / FLOW_LOG_SCALE
-    assert np.all(final_visibility < MIN_FLOW_VISIBILITY), "Animation ends with visible flows"
     print(f"n={n}: R(0)={ratios[0]:.10f}, R({END_TIME:g})={ratios[-1]:.10f}")
 
 
@@ -220,15 +209,18 @@ def mix(a, b, fraction):
     return tuple(round(x + (y - x) * fraction) for x, y in zip(a, b))
 
 
+def flow_strength(flow):
+    """A shared continuous scale: zero flow has zero width and zero opacity."""
+    return log1p(abs(flow) / FLOW_REFERENCE) / FLOW_LOG_SCALE
+
+
 def sites(n, center):
     return [(center[0] + RING_RADIUS * sin(2 * pi * k / n),
              center[1] - RING_RADIUS * cos(2 * pi * k / n)) for k in range(n)]
 
 
-def font(size, bold=False):
-    candidates = (("DejaVuSans-Bold.ttf", "/System/Library/Fonts/Supplemental/Arial Bold.ttf")
-                  if bold else ("DejaVuSans.ttf", "/System/Library/Fonts/Supplemental/Arial.ttf"))
-    for candidate in candidates:
+def font(size):
+    for candidate in ("DejaVuSans.ttf", "/System/Library/Fonts/Supplemental/Arial.ttf"):
         try:
             return ImageFont.truetype(candidate, size * SCALE)
         except OSError:
@@ -239,15 +231,6 @@ def font(size, bold=False):
 def render_heat(t):
     image = Image.new("RGB", (DIAGRAM_WIDTH * SCALE, DIAGRAM_HEIGHT * SCALE), WHITE)
     draw = ImageDraw.Draw(image)
-    distributions = tuple(model.distribution(t) for model in MODELS)
-    flows = tuple(model.net_flows(p) for model, p in zip(MODELS, distributions))
-    max_flow = max(float(np.max(np.abs(values))) for values in flows)
-    max_visibility = log1p(max_flow / FLOW_REFERENCE) / FLOW_LOG_SCALE
-    # Fade the complete flow field near equilibrium, not individual edges.
-    # Per-edge cutoffs otherwise delay weak flows that start simultaneously.
-    fade = np.clip((max_visibility - MIN_FLOW_VISIBILITY) /
-                   (FULL_FLOW_VISIBILITY - MIN_FLOW_VISIBILITY), 0.0, 1.0)
-    opacity = float(fade ** 2 * (3 - 2 * fade))
 
     def line(points, color, width=1):
         draw.line([(round(x * SCALE), round(y * SCALE)) for x, y in points],
@@ -259,26 +242,23 @@ def render_heat(t):
                       (round((x + radius) * SCALE), round((y + radius) * SCALE))],
                      fill=fill, outline=outline, width=max(1, round(width * SCALE)))
 
-    def label(text, x, y, size=22, bold=False):
-        draw.text((x * SCALE, y * SCALE), text, font=font(size, bold), fill=INK, anchor="mm")
-
-    for model, center, arrowhead_scale, p, signed_flows in zip(
-            MODELS, CENTERS, ARROWHEAD_SCALES, distributions, flows):
+    for model, center in zip(MODELS, CENTERS):
+        p = model.distribution(t)
         check_distribution(model, p)
         locations = sites(model.n, center)
         radii = MASS_RADIUS * np.sqrt(p)
         disk(center, RING_RADIUS, None, GUIDE, 0.8)
-        label(f"n = {model.n}", center[0], 317, size=24)
-        # Equal masses have zero net flow. Ignore roundoff at that equality,
-        # without using a perceptual threshold that hides weak genuine flows.
-        equality_tolerance = 16 * np.finfo(float).eps * float(p.max())
+        draw.text((center[0] * SCALE, 317 * SCALE), f"n = {model.n}",
+                  font=font(24), fill=INK, anchor="mm")
+        signed_flows = model.net_flows(p)
         # Faint transfers first, so stronger transfers remain visible at crossings.
         for index in np.argsort(np.abs(signed_flows)):
-            x, y = int(model.x[index]), int(model.y[index])
             flow = float(signed_flows[index])
-            if opacity == 0 or flow == 0 or abs(p[x] - p[y]) <= equality_tolerance:
+            strength = flow_strength(flow)
+            color = mix(WHITE, FLOW_COLOR, strength)
+            if color == WHITE:
                 continue
-            visibility = log1p(abs(flow) / FLOW_REFERENCE) / FLOW_LOG_SCALE
+            x, y = int(model.x[index]), int(model.y[index])
             if flow < 0:
                 x, y = y, x
             start, end = locations[x], locations[y]
@@ -291,13 +271,9 @@ def render_heat(t):
                 continue
             a = (start[0] + ux * start_margin, start[1] + uy * start_margin)
             b = (end[0] - ux * end_margin, end[1] - uy * end_margin)
-            # Keep weak indirect transfers readable, while a nonlinear width
-            # gives the dominant transfers more contrast on the same fixed scale.
-            color = mix(WHITE, FLOW_COLOR, opacity * (0.55 + 0.45 * visibility ** 1.5))
-            width = 0.8 + 4.2 * visibility ** 4
-            line([a, b], color, width)
-            length = min((4 + 5 * visibility) * arrowhead_scale, available * 0.45)
-            half_width = (1.5 + 1.5 * visibility) * arrowhead_scale
+            line([a, b], color, 5 * strength)
+            length = min(2 + 8 * strength, available * 0.45)
+            half_width = 0.35 * length
             arrow = [b, (b[0] - ux * length - uy * half_width,
                           b[1] - uy * length + ux * half_width),
                      (b[0] - ux * length + uy * half_width,
@@ -312,6 +288,22 @@ def render_heat(t):
 
     return image.resize((DIAGRAM_WIDTH * EXPORT_SCALE, DIAGRAM_HEIGHT * EXPORT_SCALE),
                         Image.Resampling.LANCZOS)
+
+
+def check_rendering(times):
+    """Guard against a visible jump after the hold and unfinished final arrows."""
+    initial = np.asarray(render_heat(0), dtype=float)
+    first_step = np.asarray(render_heat(float(times[1])), dtype=float)
+    onset_change = float(np.abs(first_step - initial).mean())
+    assert onset_change < 0.1, f"Abrupt first-frame change: {onset_change:g}"
+    for model in MODELS:
+        initial_flows = model.net_flows(model.distribution(0))
+        assert sum(mix(WHITE, FLOW_COLOR, flow_strength(float(flow))) != WHITE
+                   for flow in initial_flows) == np.count_nonzero(model.rates)
+        final_flows = model.net_flows(model.distribution(float(times[-1])))
+        assert all(mix(WHITE, FLOW_COLOR, flow_strength(float(flow))) == WHITE
+                   for flow in final_flows), "Animation ends with visible flows"
+    print(f"First-frame mean RGB change: {onset_change:.6f}; final arrows invisible.")
 
 
 def export_animation(name, render_frame, times):
@@ -349,6 +341,13 @@ def export_animation(name, render_frame, times):
     with Image.open(destination) as result:
         assert result.n_frames > 200 and result.info.get("loop") == 0
         assert result.size == (exported_width, exported_height)
+        saved_durations = []
+        for frame_index in range(result.n_frames):
+            result.seek(frame_index)
+            saved_durations.append(result.info["duration"])
+        assert sum(saved_durations) == sum(durations)
+        assert saved_durations[0] >= INITIAL_HOLD_MS
+        assert saved_durations[-1] >= FINAL_HOLD_MS
     print(f"Created {destination.relative_to(ROOT)} ({destination.stat().st_size:,} bytes)")
     print(f"Loop duration: {sum(durations) / 1000:.2f} seconds")
 
@@ -358,6 +357,7 @@ def main():
         check_model(model)
     # Keep both artifacts tied to these same models, times, and export durations.
     times = END_TIME * np.linspace(0, 1, FRAME_COUNT) ** 2
+    check_rendering(times)
     export_animation("word-length-semigroup", render_heat, times)
     ratio_plot = RatioPlot()
 
