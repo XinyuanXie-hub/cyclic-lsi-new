@@ -8,11 +8,11 @@ This project uses [Lean](https://lean-lang.org/), a programming language in whic
 
 <p align="center">
   <a href="assets/word-length-semigroup.png">
-    <img src="assets/word-length-semigroup.gif" width="720" alt="Mass spreading from one site around a nine-site cycle toward uniform equilibrium. Disk area represents mass; darker blue segments indicate greater net transfer rates.">
+    <img src="assets/word-length-semigroup.gif" width="1000" alt="Mass spreading around a nine-site cycle, alongside a synchronized plot of relative entropy divided by the Dirichlet energy of the square-root density. The ratio approaches the sharp bound 2 from below.">
   </a>
 </p>
 
-*Mass spreading under the word-length semigroup on nine sites. Disk area represents mass; darker blue segments indicate greater net transfer rates.*
+*Mass spreading under the word-length semigroup on nine sites. Disk area represents mass; darker blue segments indicate greater net transfer rates. The plot shows relative entropy divided by the Dirichlet energy of the square-root density. Along this evolution, the ratio approaches the sharp bound 2.*
 
 ## Mathematical statement
 
