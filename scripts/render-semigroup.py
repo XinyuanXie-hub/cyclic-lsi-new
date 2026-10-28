@@ -43,6 +43,7 @@ EXPORT_SCALE = 2
 RING_RADIUS = 123
 MASS_RADIUS = 18
 SITE_RADIUS = 2.8
+ARROW_TIP_GAP = 4.5
 CENTERS = ((180, 154), (540, 154))
 WHITE = (255, 255, 255)
 INK = (31, 41, 55)
@@ -265,15 +266,17 @@ def render_heat(t):
             distance = hypot(end[0] - start[0], end[1] - start[1])
             ux, uy = (end[0] - start[0]) / distance, (end[1] - start[1]) / distance
             start_margin = max(SITE_RADIUS, radii[x]) + 0.8
-            end_margin = max(SITE_RADIUS, radii[y]) + 1.2
+            # Keep arrow tips clear of the vertex circles after downsampling.
+            end_margin = max(SITE_RADIUS, radii[y]) + ARROW_TIP_GAP
             available = distance - start_margin - end_margin
             if available < 2:
                 continue
             a = (start[0] + ux * start_margin, start[1] + uy * start_margin)
             b = (end[0] - ux * end_margin, end[1] - uy * end_margin)
-            line([a, b], color, 5 * strength)
             length = min(2 + 8 * strength, available * 0.45)
             half_width = 0.35 * length
+            base = (b[0] - ux * length, b[1] - uy * length)
+            line([a, base], color, 5 * strength)
             arrow = [b, (b[0] - ux * length - uy * half_width,
                           b[1] - uy * length + ux * half_width),
                      (b[0] - ux * length + uy * half_width,
