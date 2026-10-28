@@ -7,13 +7,14 @@ This project uses [Lean](https://lean-lang.org/), a programming language in whic
 > [arXiv:2606.02847](https://arxiv.org/abs/2606.02847).
 
 
-*The hot spot $`\rho_0`$ at the origin spreads along the finite cycle, according to the long-range transportation specified by the word-length Laplacian $`-A_{\psi_n}`$, until all nodes reach the same temperature.*
+
 <p align="center">
   <a href="assets/word-length-semigroup.png">
     <img src="assets/word-length-semigroup.gif" width="900" alt="Heat initially concentrated at the origin spreads on discrete cycles with n = 5 and n = 21.">
   </a>
 </p>
 
+*The heat density $`\rho_0`$ at the origin spreads along the finite cycle, until all nodes reach the same temperature. The heat transportation follows from the dynamics specified by the word-length Laplacian $`-A_{\psi_n}`$. *
 
 ```math
 R_n(t)=\frac{\mathrm{Ent}_{\pi}(\rho_t)}{\mathcal E_n(\sqrt{\rho_t})}.
