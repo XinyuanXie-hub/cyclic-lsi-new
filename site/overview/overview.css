@@ -42,9 +42,8 @@ p, blockquote, figure, ol { margin: 0 0 16px; }
 blockquote { padding: 0 1em; color: #59636e; border-left: 0.25em solid #d1d9e0; }
 blockquote p { margin: 0; }
 figure { margin-right: auto; margin-left: auto; }
-figure a { display: block; }
 figure img { display: block; width: 100%; height: auto; }
-.cycles { width: 100%; }
+.cycles { width: 750px; max-width: 100%; }
 .ratio { width: 64.444444%; }
 .equation { margin: 20px 0; overflow-x: auto; overflow-y: hidden; }
 ol { padding-left: 2em; }

@@ -9,24 +9,25 @@ This project uses [Lean](https://lean-lang.org/), a programming language in whic
 
 
 <p align="center">
-  <a href="assets/word-length-semigroup.png">
-    <img src="assets/word-length-semigroup.gif" width="900" alt="Heat initially concentrated at the origin spreads on discrete cycles with n = 5 and n = 21.">
-  </a>
+  <img src="assets/word-length-semigroup.gif" width="750" alt="Heat initially concentrated at the origin spreads on discrete cycles with n = 5 and n = 21.">
 </p>
 
-*The heat density $`\rho_0`$ at the origin spreads along the finite cycle, until all nodes reach the same temperature. The heat transportation follows from the dynamics specified by the word-length Laplacian $`-A_{\psi_n}`$.*
+*The heat density at the origin spreads along the finite cycle until all nodes reach the same temperature. The heat tranfer dynamics here are governed by the word-length Laplacian $`-A_{\psi_n}`$.*
 
+The inequality we verify below prove the optimal bound on ratio of the relative entropy and the Dirichlet energy for that dynamics.
+
+<!--
 ```math
 R_n(t)=\frac{\mathrm{Ent}_{\pi}(\rho_t)}{\mathcal E_n(\sqrt{\rho_t})}.
 ```
 
 <p align="center">
-  <a href="assets/entropy-energy-ratio.png">
-    <img src="assets/entropy-energy-ratio.gif" width="580" alt="The entropy-to-energy ratios R_n(t) for n = 5 and n = 21 approach 2 from below.">
-  </a>
+  <img src="assets/entropy-energy-ratio.gif" width="580" alt="The entropy-to-energy ratios R_n(t) for n = 5 and n = 21 approach 2 from below.">
 </p>
 
 Here $`\rho_t`$ is the heat density evolving from $`\rho_0`$ at time $`t`$. $`\mathrm{Ent}_{\pi}(\rho_t)`$ and $`\mathcal E_n(\sqrt{\rho_t})`$ are the relative entropy and the Dirichlet form, capturing how $`\rho_t`$ varies from equilibrium information-theoretically and analytically. One may notice that the plotted ratios of these two quantities approach $`2`$ from below, and may wonder whether this upper bound always holds. The inequality we verify below proves this upper bound holds for arbitrary density functions for all $`n \geq 4`$.
+
+-->
 
 ## Mathematical statement
 
