@@ -12,7 +12,7 @@ All transfers enter the actual dynamics and energy calculation.
 The graph shows Ent_pi(rho_t) / E_n(sqrt(rho_t)), rho_t = n p_t.
 It is a numerical illustration, not a proof. The equilibrium ratio is 0/0;
 the plotted finite-time ratios approach 2. Playback slows the early evolution
-by sampling mathematical time nonuniformly; the common time is always shown.
+by sampling mathematical time nonuniformly; graph markers show the common time.
 """
 
 from math import cos, hypot, log, log1p, pi, sin
@@ -21,26 +21,30 @@ from pathlib import Path
 import numpy as np
 from matplotlib.backends.backend_agg import FigureCanvasAgg
 from matplotlib.figure import Figure
+from matplotlib.lines import Line2D
 from PIL import Image, ImageDraw, ImageFont
 
 
 ROOT = Path(__file__).resolve().parents[1]
-SIZES = (4, 100)
+SIZES = (6, 25)
 DIAGRAM_WIDTH, PLOT_WIDTH, HEIGHT = 720, 500, 430
 WIDTH = DIAGRAM_WIDTH + PLOT_WIDTH
 END_TIME = 7.0
 FRAME_COUNT = 300
 FRAME_DURATION_MS = 70
-SCALE = 2
+SCALE = 4
+EXPORT_SCALE = 2
 RING_RADIUS = 123
 MASS_RADIUS = 30
 CENTERS = ((180, 203), (540, 203))
 WHITE = (255, 255, 255)
-INK = (57, 66, 77)
+INK = (31, 41, 55)
 GUIDE = (196, 204, 213)
-BLUE = (59, 123, 169)
-FLOW_BLUE = (19, 75, 121)
-PLOT_COLORS = ("#3b7ba9", "#ca722d")
+BLUE = (21, 53, 75)
+FLOW_COLOR = (213, 94, 0)
+PLOT_COLORS = ("#0072b2", "#d55e00")
+PLOT_STYLES = ("-", (0, (5, 3)))
+PLOT_MARKERS = ("o", "D")
 FLOW_REFERENCE = 0.0001
 MIN_FLOW_VISIBILITY = 0.15
 
@@ -163,18 +167,26 @@ class RatioPlot:
         for edge in ("left", "bottom"):
             axes.spines[edge].set_color("#b9c1ca")
         axes.tick_params(colors="#59616d", labelsize=12, width=0.7, length=3)
-        axes.axhline(2, color="#7c8792", linewidth=1.2, linestyle=(0, (4, 4)), zorder=1)
+        axes.axhline(2, color="#67727e", linewidth=1.3, linestyle=":", zorder=1)
         self.curves = []
-        for model, color in zip(MODELS, PLOT_COLORS):
+        legend_handles = []
+        for model, color, style, shape in zip(MODELS, PLOT_COLORS, PLOT_STYLES, PLOT_MARKERS):
             ratios = np.array([model.ratio(t) for t in self.times])
-            axes.plot(self.times, ratios, color=color, alpha=0.16, linewidth=1.8, zorder=2)
-            trail, = axes.plot([], [], color=color, linewidth=2.3, zorder=3,
+            axes.plot(self.times, ratios, color=color, alpha=0.20, linewidth=1.8,
+                      linestyle=style, zorder=2)
+            trail, = axes.plot([], [], color=color, linewidth=2.6, linestyle=style, zorder=3,
                                label=rf"$n={model.n}$")
-            marker, = axes.plot([], [], "o", color=color, markersize=7,
-                                markeredgecolor="white", markeredgewidth=0.8,
+            marker, = axes.plot([], [], marker=shape, linestyle="none", color=color,
+                                markersize=7.5, markerfacecolor=color if shape == "o" else "none",
+                                markeredgecolor=color, markeredgewidth=1.4,
                                 clip_on=False, zorder=4)
             self.curves.append((model, ratios, trail, marker))
-        axes.legend(loc="lower right", frameon=False, fontsize=12, handlelength=1.8)
+            legend_handles.append(Line2D([], [], color=color, linestyle=style, linewidth=2.6,
+                                         marker=shape, markersize=6,
+                                         markerfacecolor=color if shape == "o" else "none",
+                                         label=rf"$n={model.n}$"))
+        axes.legend(handles=legend_handles, loc="lower right", frameon=False,
+                    fontsize=12, handlelength=2.4)
 
     def render(self, t):
         mask = self.times < t
@@ -228,7 +240,7 @@ def render(t, ratio_plot=None):
         locations = sites(model.n, center)
         radii = MASS_RADIUS * np.sqrt(p)
         disk(center, RING_RADIUS, None, GUIDE, 0.8)
-        label(f"n = {model.n}", center[0], 27)
+        label(f"n = {model.n}", center[0], 394, size=24)
         signed_flows = model.net_flows(p)
         # Faint transfers first, so stronger transfers remain visible at crossings.
         for index in np.argsort(np.abs(signed_flows)):
@@ -248,8 +260,8 @@ def render(t, ratio_plot=None):
                 continue
             a = (start[0] + ux * start_margin, start[1] + uy * start_margin)
             b = (end[0] - ux * end_margin, end[1] - uy * end_margin)
-            color = mix(WHITE, FLOW_BLUE, visibility ** 0.6)
-            width = 0.6 + 3.4 * visibility
+            color = mix(WHITE, FLOW_COLOR, visibility ** 0.6)
+            width = 0.65 + 4 * visibility
             line([a, b], color, width)
             if visibility >= 0.30 and available >= 15:
                 length = 4 + 5 * visibility
@@ -266,9 +278,8 @@ def render(t, ratio_plot=None):
             else:
                 disk(locations[index], radii[index], BLUE, mix(BLUE, INK, 0.2), 0.6)
 
-    label(f"t = {t:.2f}", DIAGRAM_WIDTH / 2, 394, size=20)
     image.paste((ratio_plot or RatioPlot()).render(t), (DIAGRAM_WIDTH * SCALE, 0))
-    return image.resize((WIDTH, HEIGHT), Image.Resampling.LANCZOS)
+    return image.resize((WIDTH * EXPORT_SCALE, HEIGHT * EXPORT_SCALE), Image.Resampling.LANCZOS)
 
 
 def main():
@@ -278,30 +289,36 @@ def main():
     output.mkdir(exist_ok=True)
     ratio_plot = RatioPlot()
     times = END_TIME * np.linspace(0, 1, FRAME_COUNT) ** 2
-    frames = [render(float(t), ratio_plot) for t in times]
     render(0.7, ratio_plot).save(output / "word-length-semigroup.png", optimize=True)
     sample_indices = (0, 30, 70, 130, 210, FRAME_COUNT - 1)
-    sample = Image.new("RGB", (WIDTH, HEIGHT * len(sample_indices)), WHITE)
+    exported_width, exported_height = WIDTH * EXPORT_SCALE, HEIGHT * EXPORT_SCALE
+    sample = Image.new("RGB", (exported_width, exported_height * len(sample_indices)), WHITE)
     for row, i in enumerate(sample_indices):
-        sample.paste(frames[i], (0, row * HEIGHT))
-    palette = sample.quantize(colors=128, method=Image.Quantize.MEDIANCUT)
+        sample.paste(render(float(times[i]), ratio_plot), (0, row * exported_height))
+    palette = sample.quantize(colors=256, method=Image.Quantize.MEDIANCUT)
     colors = palette.getpalette()
-    white_index = max(range(128), key=lambda i: sum(colors[3 * i:3 * i + 3]))
+    white_index = max(range(256), key=lambda i: sum(colors[3 * i:3 * i + 3]))
     colors[3 * white_index:3 * white_index + 3] = WHITE
     palette.putpalette(colors)
-    indexed = []
-    for frame in frames:
-        indexed_frame = frame.quantize(palette=palette, dither=Image.Dither.NONE)
-        white_mask = frame.convert("L").point(lambda value: 255 if value == 255 else 0)
-        indexed_frame.paste(white_index, mask=white_mask)
-        indexed.append(indexed_frame)
+    # Generate frames incrementally rather than retaining all high-resolution RGB frames.
+    def indexed_frames():
+        for t in times:
+            frame = render(float(t), ratio_plot)
+            indexed_frame = frame.quantize(palette=palette, dither=Image.Dither.NONE)
+            white_mask = frame.convert("L").point(lambda value: 255 if value == 255 else 0)
+            indexed_frame.paste(white_index, mask=white_mask)
+            yield indexed_frame
+
+    frames = indexed_frames()
+    first = next(frames)
     durations = [FRAME_DURATION_MS] * FRAME_COUNT
     durations[0], durations[-1] = 1000, 3000
     destination = output / "word-length-semigroup.gif"
-    indexed[0].save(destination, save_all=True, append_images=indexed[1:],
+    first.save(destination, save_all=True, append_images=frames,
                     duration=durations, loop=0, disposal=1, optimize=True)
     with Image.open(destination) as result:
         assert result.n_frames > 200 and result.info.get("loop") == 0
+        assert result.size == (exported_width, exported_height)
     print(f"Created {destination.relative_to(ROOT)} ({destination.stat().st_size:,} bytes)")
     print(f"Loop duration: {sum(durations) / 1000:.2f} seconds")
     print("Checked both evolutions, flow directions, conservation, and entropy/energy ratios.")

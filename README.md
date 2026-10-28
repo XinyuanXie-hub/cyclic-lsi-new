@@ -8,7 +8,7 @@ This project uses [Lean](https://lean-lang.org/), a programming language in whic
 
 <p align="center">
   <a href="assets/word-length-semigroup.png">
-    <img src="assets/word-length-semigroup.gif" width="1100" alt="Heat evolving on cycles with n = 4 and n = 100, alongside their synchronized ratios R_n(t), approaching 2 from below.">
+    <img src="assets/word-length-semigroup.gif" width="1100" alt="Heat evolving on cycles with n = 6 and n = 25, alongside their synchronized ratios R_n(t), approaching 2 from below.">
   </a>
 </p>
 
