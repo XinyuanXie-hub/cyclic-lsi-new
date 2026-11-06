@@ -1,0 +1,62 @@
+:root {
+  color-scheme: light;
+  color: #1f2328;
+  background: #fff;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; }
+a { color: #0969da; text-decoration: none; }
+a:hover { text-decoration: underline; }
+a:focus-visible { outline: 2px solid #0969da; outline-offset: 4px; }
+
+.toolbar {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 18px 40px;
+  border-bottom: 1px solid #d1d9e0;
+  font-size: 14px;
+}
+
+.repository-link { font-weight: 500; }
+
+/* Clip the unscaled layout without creating an inner scroll container for anchors. */
+.page-frame { width: 100%; max-width: 980px; margin: 0 auto; overflow: clip; }
+.readme {
+  width: 980px;
+  padding: 32px 40px 40px;
+  overflow-wrap: break-word;
+  transform-origin: top left;
+  transform: scale(var(--page-scale, 1));
+}
+
+h1, h2 { line-height: 1.25; font-weight: 600; padding-bottom: 0.3em; border-bottom: 1px solid #d1d9e0; }
+h1 { margin: 0 0 16px; font-size: 32px; }
+h2 { margin: 24px 0 16px; font-size: 24px; }
+p, blockquote, figure, ol { margin: 0 0 16px; }
+blockquote { padding: 0 1em; color: #59636e; border-left: 0.25em solid #d1d9e0; }
+blockquote p { margin: 0; }
+figure { margin-right: auto; margin-left: auto; }
+figure img { display: block; width: 100%; height: auto; }
+.cycles { width: 750px; max-width: 100%; }
+.ratio { width: 64.444444%; }
+.equation { margin: 20px 0; overflow-x: auto; overflow-y: hidden; }
+ol { padding-left: 2em; }
+li + li { margin-top: 4px; }
+code { padding: 0.2em 0.4em; border-radius: 6px; background: #eff1f3; font: 85% ui-monospace, SFMono-Regular, Consolas, monospace; }
+.readme > :last-child { margin-bottom: 0; }
+
+@media (max-width: 600px) {
+  .toolbar { padding: 12px 16px; }
+}
+
+@media print {
+  .toolbar { display: none; }
+  .page-frame { height: auto !important; overflow: visible; }
+  .readme { width: 100%; padding: 0; transform: none; }
+}
