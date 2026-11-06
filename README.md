@@ -64,7 +64,7 @@ The results of `lake comparator` can be checked through the GitHub workflow prov
 
 1. Sign in to GitHub, open the “Actions” tab, then open the first workflow run listed there, or open it directly from [here](https://xinyuanxie-hub.github.io/cyclic-lsi-new/latest-run/).
 2. Click “Verify the Challenge against Solution”, then expand “Run Comparator with Lean, NanoDa, and con-ron”.
-3. Check that the log reports acceptance by con-ron, NanoDa, and Lean, followed by `Your solution is okay!`.
+3. Check that the log (lines 39–44) reports acceptance by con-ron, NanoDa, and Lean, followed by `Your solution is okay!`.
 
 
 Note: Here, we use the [“gold standard”](https://lean-lang.org/doc/reference/latest/ValidatingProofs/#validating-comparator) for validating proofs in Lean, and we refer readers to [“Challenges and External Checkers”](https://lean-lang.org/doc/reference/latest/Build-Tools-and-Distribution/Lake/#lake-comparator) for details on how it works.
@@ -83,8 +83,4 @@ Note: the GitHub workflow is defined in [lean.yml](.github/workflows/lean.yml), 
 
 ## Acceleration
 
-The revised proof reduces the owned Lean dependency closure from 27 modules (5,060 code-bearing lines) to 2 modules (654 lines), including all owned helpers. It works directly on cyclic groups, uses a square-root iteration certificate for the scalar inequality, and treats the Fourier estimate uniformly across odd and even orders. The theorem, assumptions, and `Challenge.lean` are unchanged.
-
-On the same machine, four balanced trials per version reduced median complete verification time from **158.834 s to 62.026 s** (**60.95% less time**), comparing [the original revision](https://github.com/XinyuanXie-hub/cyclic-lsi-new/commit/4b4ff9a506c0aac696119542b76276238c14cb9b) with this proof. Every trial freshly compiled all owned modules and the Challenge, then ran the unchanged comparator, axiom checks, and Lean, NanoDa, and con-ron kernels. Measurements used Lean 4.35.0, warm upstream dependency caches, and a four-CPU quota; dependency downloads and setup were excluded. Observed ranges were 153.721–175.054 s and 61.428–64.997 s. These are local measurements, not a guarantee for GitHub Actions or other hardware; the repository verification workflow is unchanged.
-
-The complete original tracked source and implementation are preserved in [`old lean code`](old%20lean%20code/). Copy that folder's contents into a separate working directory to restore the original project, retaining its pinned toolchain and dependencies.
+The new Lean proof uses just 783 lines, replacing the original 6,025-line proof, and takes 39.05% of the original verification time. A detailed acceleration report is available [here](Cyclic-LSI-acceleration-report.pdf).
